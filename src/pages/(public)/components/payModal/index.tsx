@@ -357,7 +357,9 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
              }
          }
          catch {
-             toast.error('Ocorreu um erro ao processar a sua solicitação!')
+            toast.error('Ocorreu um erro ao processar a sua solicitação!',{
+                position:"top-center"
+            })
          }
         finally {
             setLoadingVerify(false)

@@ -180,7 +180,9 @@ export function TransferDomainModal({ opened, setOpened, eppKey }: { opened: boo
             }
         }
         catch {
-            toast.error('Ocorreu um erro ao processar a sua solicitação!')
+            toast.error('Ocorreu um erro ao processar a sua solicitação!',{
+                position:"top-center"
+            })
         }
         finally {
             setLoadingVerify(false)

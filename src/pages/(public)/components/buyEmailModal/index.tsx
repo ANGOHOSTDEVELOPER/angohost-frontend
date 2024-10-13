@@ -353,11 +353,15 @@ export function BuyEmailModal({ opened, setOpened, plans, planIndex }: ICreateMo
                 }
             }
             else {
-                toast.error('Não encontrado!')
+                toast.error('Não encontrado!',{
+                    position:"top-center"
+                })
             }
         }
         catch {
-            toast.error('Ocorreu um erro ao processar a sua solicitação!')
+            toast.error('Ocorreu um erro ao processar a sua solicitação!',{
+                position:"top-center"
+            })
         }
         finally {
             setLoadingVerify(false)
