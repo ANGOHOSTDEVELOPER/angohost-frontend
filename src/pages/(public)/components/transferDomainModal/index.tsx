@@ -20,7 +20,6 @@ import { RejectModal } from "../rejectModal"
 // import axios from "axios"
 // import proxy from "@/services/proxy"
 import axios from "axios"
-import { IFORNECEDOR_RESPONSE } from "../buyHostingModal"
 
 // interface IYabaduRespose {
 //     sucess: boolean,
@@ -67,14 +66,14 @@ interface ApiResponse {
 }
 */
 
-// interface IEdgarResponse {
-//     data: {
-//         success: boolean,
-//         nome: string,
-//         numero_contacto: string,
-//         endereco: string,
-//     }
-// }
+ export interface IEdgarResponse {
+    data: {
+        success: boolean,
+        nome: string,
+        numero_contacto: string,
+        endereco: string,
+    }
+}
 
 //  export interface IPlenoResponse {
 //     data: {
@@ -158,16 +157,16 @@ export function TransferDomainModal({ opened, setOpened, eppKey }: { opened: boo
         // }º
         try {
             
-            const response: IFORNECEDOR_RESPONSE = await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
+            const response: IEdgarResponse = await (await axios.get(`https://consulta.edgarsingui.ao/public/consultar-por-nif/${nif}`)).data
            console.log(response)
 
 
          
          
-            if (response.retorno.cod===200) {
+            if (response.data.success) {
                 toast.success('BI Verificado com sucesso!')
                 setClientLoadedInfo({
-                    name: response.data.noContribuinte
+                    name: response.data.nome
                 })
                 if (NIF_REGEX.test(nif)) {
                     setIsNIFLoaded(true)

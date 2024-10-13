@@ -27,8 +27,7 @@ import { Ciclo, IPlano } from "@/interfaces/plan.interface"
 import { ExitModal } from "../exitModal"
 import useCart from "@/hooks/useCart"
 import axios from "axios"
-//import proxy from "@/services/proxy"
-
+import { IEdgarResponse } from "../transferDomainModal"
 
 interface ICreateModalProps {
     opened: boolean,
@@ -284,11 +283,11 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
         //     setLoadingVerify(false)
         // }º
         try {
-            const response: IFORNECEDOR_RESPONSE = await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
-            if (response.retorno.cod===200) {
+            const response: IEdgarResponse = await (await axios.get(`https://consulta.edgarsingui.ao/public/consultar-por-nif/${nif}`)).data
+            if (response.data.success) {
                 toast.success('BI Verificado com sucesso!')
                 setClientLoadedInfo({
-                    name: response.data.noContribuinte
+                    name: response.data.nome
                 })
                 if (NIF_REGEX.test(nif)) {
                     setIsNIFLoaded(true)

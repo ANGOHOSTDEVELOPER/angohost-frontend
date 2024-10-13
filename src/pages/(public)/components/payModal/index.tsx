@@ -30,7 +30,8 @@ import usePayHosting from "@/hooks/usePayHosting"
 import api from "@/services/api"
 
 import axios from "axios"
-import { IFORNECEDOR_RESPONSE } from "../buyHostingModal"
+
+import { IEdgarResponse } from "../transferDomainModal"
 
 interface Client {
     id: string;
@@ -336,12 +337,12 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
         //     setLoadingVerify(false)
         // }º
         try {
-            const response: IFORNECEDOR_RESPONSE = await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
+            const response: IEdgarResponse = await (await axios.get(`https://consulta.edgarsingui.ao/public/consultar-por-nif/${nif}`)).data
             console.log(response)
-             if (response.retorno.cod===200) {
+             if (response.data.success) {
                 
                  setClientLoadedInfo({
-                     name: response.data.noContribuinte
+                     name: response.data.nome
                  })
                  if (NIF_REGEX.test(nif)) {
                      setIsNIFLoaded(true)

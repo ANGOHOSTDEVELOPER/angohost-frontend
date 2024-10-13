@@ -27,7 +27,7 @@ import useCart from "@/hooks/useCart"
 import { ExitModal } from "../exitModal"
 //import proxy from "@/services/proxy"
 import axios from "axios"
-import { IFORNECEDOR_RESPONSE } from "../buyHostingModal"
+import { IEdgarResponse } from "../transferDomainModal"
 
 /*
 interface IYabaduRespose {
@@ -337,11 +337,11 @@ export function BuyEmailModal({ opened, setOpened, plans, planIndex }: ICreateMo
         //     setLoadingVerify(false)
         // }º
         try {
-            const response: IFORNECEDOR_RESPONSE= await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
-            if (response.retorno.cod===200) {
+            const response: IEdgarResponse = await (await axios.get(`https://consulta.edgarsingui.ao/public/consultar-por-nif/${nif}`)).data
+            if (response.data.success) {
                 toast.success('BI Verificado com sucesso!')
                 setClientLoadedInfo({
-                    name: response.data.noContribuinte
+                    name: response.data.nome
                 })
                 if (NIF_REGEX.test(nif)) {
                     setIsNIFLoaded(true)
