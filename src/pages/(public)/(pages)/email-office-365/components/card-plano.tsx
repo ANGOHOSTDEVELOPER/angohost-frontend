@@ -38,23 +38,23 @@ export const CardPlanoMicrosoft: React.FC<CardProps> = ({
     // ];
 
     const servicesCard1 = [
-      { name: "Exchange", icon: "/microsoft-icons/BP-Exchange_RE46TV5.webp", link: "#" },
-      { name: "OneDrive", icon: "/microsoft-icons/OneDrive_260px_RE4oUAF.webp", link: "#" },
-      { name: "SharePoint", icon: "/microsoft-icons/Sharepoint_260px_RE4oH1F.webp", link: "#" },
-      { name: "Word", icon: "/microsoft-icons/Icon_Word_2x_RE2Xmzs.webp", link: "#" },
-      { name: "Excel", icon: "/microsoft-icons/Icon_Excel_2x_RE2Xztz.webp", link: "#" },
-      { name: "PowerPoint", icon: "/microsoft-icons/Icon_PowerPoint_2x_RE2Xmzm.webp", link: "#" },
-      { name: "Outlook", icon: "/microsoft-icons/BP-Outlook_RE47eLs.webp", link: "#" },
-      { name: "Microsoft Loop", icon: "/microsoft-icons/logo_msft_loop_36x36.webp", link: "#" },
-      { name: "Clipchamp", icon: "/microsoft-icons/Icon-Clipchamp-25x25.webp", link: "#" },
+      { name: "Exchange", icon: "/assets/microsoft-icons/BP-Exchange_RE46TV5.webp", link: "#" },
+      { name: "OneDrive", icon: "/assets/microsoft-icons/OneDrive_260px_RE4oUAF.webp", link: "#" },
+      { name: "SharePoint", icon: "/assets/microsoft-icons/Sharepoint_260px_RE4oH1F.webp", link: "#" },
+      { name: "Word", icon: "/assets/microsoft-icons/Icon_Word_2x_RE2Xmzs.webp", link: "#" },
+      { name: "Excel", icon: "/assets/microsoft-icons/Icon_Excel_2x_RE2Xztz.webp", link: "#" },
+      { name: "PowerPoint", icon: "/assets/microsoft-icons/Icon_PowerPoint_2x_RE2Xmzm.webp", link: "#" },
+      { name: "Outlook", icon: "/assets/microsoft-icons/BP-Outlook_RE47eLs.webp", link: "#" },
+      { name: "Microsoft Loop", icon: "/assets/microsoft-icons/logo_msft_loop_36x36.webp", link: "#" },
+      { name: "Clipchamp", icon: "/assets/microsoft-icons/Icon-Clipchamp-25x25.webp", link: "#" },
      
     ];
   
     const appsCard1 = [
-      { name: "Word", icon: "/microsoft-icons/Icon_Word_2x_RE2Xmzs.webp", link: "#" },
-      { name: "Excel", icon: "/microsoft-icons/Icon_Excel_2x_RE2Xztz.webp", link: "#" },
-      { name: "PowerPoint", icon: "/microsoft-icons/Icon_PowerPoint_2x_RE2Xmzm.webp", link: "#" },
-      { name: "Outlook", icon: "/microsoft-icons/BP-Outlook_RE47eLs.webp", link: "#" },
+      { name: "Word", icon: "/assets/microsoft-icons/Icon_Word_2x_RE2Xmzs.webp", link: "#" },
+      { name: "Excel", icon: "/assets/microsoft-icons/Icon_Excel_2x_RE2Xztz.webp", link: "#" },
+      { name: "PowerPoint", icon: "/assets/microsoft-icons/Icon_PowerPoint_2x_RE2Xmzm.webp", link: "#" },
+      { name: "Outlook", icon: "/assets/microsoft-icons/BP-Outlook_RE47eLs.webp", link: "#" },
     
     ];
   
