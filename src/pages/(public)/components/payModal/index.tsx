@@ -30,7 +30,7 @@ import usePayHosting from "@/hooks/usePayHosting"
 import api from "@/services/api"
 
 import axios from "axios"
-import { NIF_RESPONSE } from "../buyHostingModal"
+import { IFORNECEDOR_RESPONSE } from "../buyHostingModal"
 
 interface Client {
     id: string;
@@ -336,16 +336,12 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
         //     setLoadingVerify(false)
         // }º
         try {
-            const response: NIF_RESPONSE = await (await axios.get(`https://invoice.minfin.gov.ao/commonServer/common/taxpayer/get/${nif}`)).data
+            const response: IFORNECEDOR_RESPONSE = await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
             console.log(response)
- 
- 
-          
-          
-             if (response.success) {
+             if (response.retorno.cod===200) {
                 
                  setClientLoadedInfo({
-                     name: response.data.gsmc
+                     name: response.data.noContribuinte
                  })
                  if (NIF_REGEX.test(nif)) {
                      setIsNIFLoaded(true)

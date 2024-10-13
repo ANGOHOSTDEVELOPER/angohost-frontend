@@ -109,12 +109,34 @@ interface UserInfo {
     companyName: string;
 }
 
- export interface NIF_RESPONSE {
+export interface NIF_RESPONSE {
     success: boolean;
     data: UserInfo;
     error: string | null;
     dataCount: number;
 }
+
+
+
+
+interface IFORNECEDOR_DATA {
+    "cdRgc": number;
+    "flAtivo": string,
+    "noContribuinte": string,
+    "nuContribuinte": string,
+    "stContribuinte": string,
+}
+export interface IFORNECEDOR_RESPONSE {
+    token: null,
+    retorno: {
+        cod: 200 | 800
+        message: string
+        msgNaoTratada: null
+    }
+    data: IFORNECEDOR_DATA
+   
+}
+
 
 
 const NIF_REGEX = /^[0-9]{10}$/
@@ -262,11 +284,11 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
         //     setLoadingVerify(false)
         // }º
         try {
-            const response: NIF_RESPONSE = await (await axios.get(`https://invoice.minfin.gov.ao/commonServer/common/taxpayer/get/${nif}`)).data
-            if (response.success) {
+            const response: IFORNECEDOR_RESPONSE = await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
+            if (response.retorno.cod===200) {
                 toast.success('BI Verificado com sucesso!')
                 setClientLoadedInfo({
-                    name: response.data.gsmc
+                    name: response.data.noContribuinte
                 })
                 if (NIF_REGEX.test(nif)) {
                     setIsNIFLoaded(true)
@@ -632,11 +654,11 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
                     <DialogHeader>
                         <DialogTitle className="text-[#000]">{currentDomain}</DialogTitle>
                         <DialogDescription className="text-[#000]">
-                        <>Domínio disponível para registro ao preço de <span className="bg-[#12753A11] text-[#12753A] py-1.5 px-3">{formatMoney((currentDomain.split('.')[0].length === 3  && (selectedExtension.tipo === '.ao' || selectedExtension.tipo === '.co.ao')) ? 300000 : selectedExtension.preco)}</span></>
+                            <>Domínio disponível para registro ao preço de <span className="bg-[#12753A11] text-[#12753A] py-1.5 px-3">{formatMoney((currentDomain.split('.')[0].length === 3 && (selectedExtension.tipo === '.ao' || selectedExtension.tipo === '.co.ao')) ? 300000 : selectedExtension.preco)}</span></>
                         </DialogDescription>
                     </DialogHeader>
                     <div className="w-full flex flex-col items-center justify-center">
-                        <h1 className="text-2xl font-bold" style={{ color: "#096909"}}>Domínio disponível</h1>
+                        <h1 className="text-2xl font-bold" style={{ color: "#096909" }}>Domínio disponível</h1>
                         <div className="flex items-center justify-center gap-2 mt-6 w-full">
                             <Button className="bg-[#fff] hover:bg-[#fff]" type="button" onClick={() => setOpenedStatus(false)} variant={'outline'}>Verificar outro</Button>
                             <Button className="bg-[#012f01] w-1/2 hover:bg-[#012f01]" type="button" onClick={() => {

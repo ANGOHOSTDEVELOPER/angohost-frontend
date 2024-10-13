@@ -27,6 +27,7 @@ import useCart from "@/hooks/useCart"
 import { ExitModal } from "../exitModal"
 //import proxy from "@/services/proxy"
 import axios from "axios"
+import { IFORNECEDOR_RESPONSE } from "../buyHostingModal"
 
 /*
 interface IYabaduRespose {
@@ -91,33 +92,33 @@ interface Email {
     atualizadoEm: string;
 }
 
-interface UserInfo {
-    nif: string;
-    gsmc: string;
-    ssswjg: string;
-    nsrdz: string;
-    nsrfrdb: string;
-    nsrcwfzr: string;
-    hdjy: string;
-    lxfs: string;
-    email: string;
-    hdzt: string;
-    ckd: string;
-    tap_type_code: string;
-    regimeIva: string;
-    nameAbb: string;
-    addressDbb: string;
-    fzjgList: [];
-    nsrzt: string;
-    companyName: string;
-}
+// interface UserInfo {
+//     nif: string;
+//     gsmc: string;
+//     ssswjg: string;
+//     nsrdz: string;
+//     nsrfrdb: string;
+//     nsrcwfzr: string;
+//     hdjy: string;
+//     lxfs: string;
+//     email: string;
+//     hdzt: string;
+//     ckd: string;
+//     tap_type_code: string;
+//     regimeIva: string;
+//     nameAbb: string;
+//     addressDbb: string;
+//     fzjgList: [];
+//     nsrzt: string;
+//     companyName: string;
+// }
 
-interface NIF_RESPONSE {
-    success: boolean;
-    data: UserInfo;
-    error: string | null;
-    dataCount: number;
-}
+// interface NIF_RESPONSE {
+//     success: boolean;
+//     data: UserInfo;
+//     error: string | null;
+//     dataCount: number;
+// }
 
 const NIF_REGEX = /^[0-9]{10}$/
 const BI_REGEX = /^[0-9]{9}[a-zA-Z]{2}[0-9]{3}$/
@@ -336,11 +337,11 @@ export function BuyEmailModal({ opened, setOpened, plans, planIndex }: ICreateMo
         //     setLoadingVerify(false)
         // }º
         try {
-            const response: NIF_RESPONSE = await (await axios.get(`https://invoice.minfin.gov.ao/commonServer/common/taxpayer/get/${nif}`)).data
-            if (response.success) {
+            const response: IFORNECEDOR_RESPONSE= await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
+            if (response.retorno.cod===200) {
                 toast.success('BI Verificado com sucesso!')
                 setClientLoadedInfo({
-                    name: response.data.gsmc
+                    name: response.data.noContribuinte
                 })
                 if (NIF_REGEX.test(nif)) {
                     setIsNIFLoaded(true)

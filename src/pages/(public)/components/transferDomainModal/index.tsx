@@ -20,7 +20,7 @@ import { RejectModal } from "../rejectModal"
 // import axios from "axios"
 // import proxy from "@/services/proxy"
 import axios from "axios"
-import { NIF_RESPONSE } from "../buyHostingModal"
+import { IFORNECEDOR_RESPONSE } from "../buyHostingModal"
 
 // interface IYabaduRespose {
 //     sucess: boolean,
@@ -158,16 +158,16 @@ export function TransferDomainModal({ opened, setOpened, eppKey }: { opened: boo
         // }º
         try {
             
-            const response: NIF_RESPONSE = await (await axios.get(`https://invoice.minfin.gov.ao/commonServer/common/taxpayer/get/${nif}`)).data
+            const response: IFORNECEDOR_RESPONSE = await (await axios.get(`https://fornecedores.minfin.gov.ao/PortalFor/servicos/perfil/situacao/nif/${nif}`)).data
            console.log(response)
 
 
          
          
-            if (response.success) {
+            if (response.retorno.cod===200) {
                 toast.success('BI Verificado com sucesso!')
                 setClientLoadedInfo({
-                    name: response.data.gsmc
+                    name: response.data.noContribuinte
                 })
                 if (NIF_REGEX.test(nif)) {
                     setIsNIFLoaded(true)
