@@ -115,9 +115,6 @@ export interface NIF_RESPONSE {
     dataCount: number;
 }
 
-
-
-
 interface IFORNECEDOR_DATA {
     "cdRgc": number;
     "flAtivo": string,

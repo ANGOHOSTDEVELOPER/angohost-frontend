@@ -163,6 +163,16 @@ export default function DetailsView() {
                                                     )}
                                                 </strong>
                                             </li>
+                                            <li>
+                                                Telefone:{" "}
+                                                <strong>
+                                                    {isLoading ? (
+                                                        <Skeleton className="w-[150px] h-4" />
+                                                    ) : (
+                                                        currentClient?.telefone
+                                                    )}
+                                                </strong>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
