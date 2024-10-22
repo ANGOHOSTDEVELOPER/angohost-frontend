@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Eye, EyeOff } from "lucide-react"
 import { Dispatch, SetStateAction, useState } from "react"
 import { TransferDomainModal } from "../transferDomainModal"
 
@@ -18,6 +18,12 @@ export function EppKeyModal({ opened, setOpened }: { opened: boolean, setOpened:
 
     const [key, setKey] = useState("")
     const [openedTransfer, setOpenedTransfer] = useState(false)
+
+    const [mostraSenha,setMostarSenha]=useState(false)
+
+    function handleMostarSenha(){
+        setMostarSenha(!mostraSenha)
+    }
 
     return (
         <>
@@ -35,7 +41,14 @@ export function EppKeyModal({ opened, setOpened }: { opened: boolean, setOpened:
                                 Chave EPP
                             </Label>
                             <div className="flex gap-2">
-                                <Input type="password" value={key} onChange={(e) => setKey(e.target.value)} id="username" placeholder="Insira a chave EPP" className="inputVerifyDomain w-full" />
+                                <Input type={mostraSenha?"text":"password"}value={key} onChange={(e) => setKey(e.target.value)} id="username" placeholder="Insira a chave EPP" className="inputVerifyDomain w-full" />
+                                <Button  className="bg-[var(--primary)] hover:bg-[var(--primary)]" type="button" onClick={handleMostarSenha} >
+                                     {!mostraSenha?
+                                        <Eye />
+                                        :
+                                        <EyeOff />
+                                     }
+                                </Button>
                             </div>
                         </div>
                         <div className="w-full flex items-center justify-center gap-2">

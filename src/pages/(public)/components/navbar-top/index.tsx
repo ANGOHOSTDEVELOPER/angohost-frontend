@@ -135,7 +135,7 @@ export function NavMenu() {
                                     </div>
                                     <p>Entregamos-te liberdade de poder registrar +750 TLDS</p>
                                 </ListItem>
-                                <ListItem className="flex flex-col items-center justify-center" href="/dominios" title="Transferencia de domínio">
+                                <ListItem className="flex flex-col items-center justify-center" href="/transferencia_de_dominios" title="Transferencia de domínio">
                                     <div className="w-full flex items-center justify-center">
                                         <img width={40} src={transferencia_dominio} alt="" />
                                     </div>

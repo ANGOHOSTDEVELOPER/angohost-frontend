@@ -56,6 +56,7 @@ import RecoverCredentials from "./pages/cliente/(pages)/(auth)/recover-password"
 import ResetPassword from "./pages/cliente/(pages)/(auth)/reset-password";
 import Expired from "./pages/(public)/(pages)/expired";
 import PaginaEmailOffice365 from "./pages/(public)/(pages)/email-office-365";
+import { PagesTransferenciaDeDominios } from "./pages/(public)/(pages)/transferir_dominio";
 
 const router = createBrowserRouter([
     {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
             {
                 path: "dominios",
                 element: <PagesDominios />,
+            },
+            {
+                path:"transferencia_de_dominios",
+                element:<PagesTransferenciaDeDominios/>
             },
             {
                 path: "beta",

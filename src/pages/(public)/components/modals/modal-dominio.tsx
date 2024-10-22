@@ -89,7 +89,7 @@ export const ModalDominio = () => {
                     <p>Entregamos-te liberdade de poder registrar +750 TLDS</p>
                 </Descricao>
             </ContainerFlex>
-            <ContainerFlex style={{textDecoration:"none"}}   to={"/dominios"} >
+            <ContainerFlex style={{textDecoration:"none"}}   to={"/transferencia_de_dominios"} >
                 <Icon>
                     <img src={transferencia_dominio} alt="" />
                 </Icon>
