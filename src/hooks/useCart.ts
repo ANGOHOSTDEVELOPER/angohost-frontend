@@ -1,4 +1,5 @@
 import useStore from "@/contexts/useStore";
+import { storePagamentoGPO } from "@/pages/(public)/components/pagamento/hooks/storePagamento";
 import api from "@/services/api";
 import useUtils from "@/utils/useutils";
 import Cookies from "js-cookie"
@@ -16,14 +17,12 @@ interface IProduct {
 interface ICartProductList {
     products: IProduct[];
 }
-
 type IFactProduct = {
     planoHospedagemId: unknown,
     planoDominioId?: unknown,
     planoEmailId?: unknown,
     quantidade?: unknown,
 }
-
 type IFact = {
     produtos: IFactProduct[],
     total: number,
@@ -50,8 +49,12 @@ type IFact = {
         dominio?: string | undefined,
         preco: number,
         quantidade: number,
-    }
+    },
+     status:"PAGA"|"PENDENTE"
 }
+
+
+
 
 
 interface UserData {
@@ -64,7 +67,6 @@ interface UserData {
     new: boolean;
     to: string;
 }
-
 interface DomainItem {
     id: string;
     name: string;
@@ -113,7 +115,8 @@ export default function useCart() {
     const { cartLenght, setCartLenght } = useStore()
     const [openPay, setOpenPay] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [openAccount, setOpenAccount] = useState(false)
+    // const [openAccount, setOpenAccount] = useState(false)
+    const {openAccount,setOpenAccount}=storePagamentoGPO()
     const { isAuthenticated } = useUtils()
     const [sets, setSets] = useState<{
         planoOK: boolean,
@@ -213,9 +216,11 @@ export default function useCart() {
     }, [])
 
     async function pay() {
+
+        console.log("comprando com pay")
         setLoading(true)
         if (!isAuthenticated()) {
-            setOpenAccount(true)
+            setOpenAccount()
             setLoading(false)
         } else {
             if (domainItem && domainItem.eppKey) {
@@ -235,7 +240,8 @@ export default function useCart() {
                         nome: owner.nome,
                     },
                     planoDominioId: domainItem.extensionId,
-                    chaveEpp: domainItem.eppKey
+                    chaveEpp: domainItem.eppKey,
+                    status:"PENDENTE"
                 }
                 console.log(domainItem)
                 const response: { success: boolean } = await (await api.post('/servicosDominiosTransferencia/transferirDominio', data)).data
@@ -288,10 +294,11 @@ export default function useCart() {
                             planoEmailId: emailItem?.planId,
                             planoHospedagemId: hostingItem?.planId
                         },
-                        idCiclo: hostingItem?.cicleId
+                        idCiclo: hostingItem?.cicleId,
+                        status:"PENDENTE"
                     }
                     if (!isAuthenticated()) {
-                        setOpenAccount(true)
+                        setOpenAccount()
                         setLoading(false)
                     }
                     else {
@@ -325,5 +332,121 @@ export default function useCart() {
 
     }
 
-    return { addToCart, cartLenght, openTrans, setOpenTrans, clearCart, getCartProducts, getTotal, removeFromCart, openPay, setOpenPay, pay, loading, openAccount, setOpenAccount };
+    async function payGPO() {
+
+        console.log("comprando com pay")
+        setLoading(true)
+        if (!isAuthenticated()) {
+            setOpenAccount()
+            setLoading(false)
+        } else {
+            if (domainItem && domainItem.eppKey) {
+                const owner: UserData = Cookies.get('newDomainTitular')
+                    ? JSON.parse(Cookies.get('newDomainTitular') as string)
+                    : { products: [] };
+                const data = {
+                    total: getTotal(),
+                    idCliente: getClientID(),
+                    dominio: domainItem.domainName,
+                    endereco: {
+                        pais: owner.pais,
+                        endereco: owner.endereco
+                    },
+                    titular: {
+                        nif: owner.nif,
+                        nome: owner.nome,
+                    },
+                    planoDominioId: domainItem.extensionId,
+                    chaveEpp: domainItem.eppKey,
+                    status:"PAGA"
+                }
+                console.log(domainItem)
+                const response: { success: boolean } = await (await api.post('/servicosDominiosTransferencia/transferirDominio', data)).data
+                if (response.success) {
+                    toast.success("DTransferência de domínio solicitada com sucesso!")
+                    setLoading(false)
+                    setOpenTrans(false)
+                    setOpenPay(false)
+                    clearCart()
+                    router('/cliente/painel/dominios/servicos')
+                }
+                else {
+                    toast.error("Ocorreu um erro ao processar o seu pedido!")
+                }
+                setLoading(false)
+            }
+            else {
+                try {
+                    const owner: UserData = Cookies.get('newDomainTitular')
+                        ? JSON.parse(Cookies.get('newDomainTitular') as string)
+                        : { products: [] };
+                    const fatura: IFact = {
+                        produtos: [{
+                            planoHospedagemId: hostingItem?.planId,
+                            planoDominioId: domainItem?.id,
+                            planoEmailId: emailItem?.id,
+                            quantidade: emailItem?.emailQuantity
+                        }],
+                        total: getTotal(),
+                        idCliente: getClientID(),
+                        dominio: owner.domain || hostingItem?.domain || emailItem?.domain,
+                        endereco: {
+                            endereco: owner.endereco,
+                            pais: owner.pais
+                        },
+                        titular: {
+                            nif: owner.nif,
+                            nome: owner.nome
+                        },
+                        planoOK: sets.planoOK,
+                        dominioOK: sets.dominioOK,
+                        emailOK: sets.emailOK,
+                        infoEmail: {
+                            dominio: emailItem?.domain,
+                            preco: emailItem?.price || 0,
+                            quantidade: emailItem?.emailQuantity || 0
+                        },
+                        ids: {
+                            planoDominioId: domainItem?.id || 0,
+                            planoEmailId: emailItem?.planId,
+                            planoHospedagemId: hostingItem?.planId
+                        },
+                        idCiclo: hostingItem?.cicleId,
+                        status: "PAGA"
+                    }
+                    if (!isAuthenticated()) {
+                        setOpenAccount()
+                        setLoading(false)
+                    }
+                    else {
+                        const response: { success: boolean } = await (await api.post('/faturas/compra', fatura, {
+                            headers: {
+                                Authorization: `Bearer ${getSessionToken()}`
+                            }
+                        })).data
+                        if (response.success) {
+                            toast.success("Compra efetuada com sucesso!")
+                            setLoading(false)
+                            setOpenTrans(false)
+                            setOpenPay(false)
+                            clearCart()
+                            router('/cliente/painel/dashboard')
+                        }
+                        else {
+                            toast.error("Ocorreu um erro ao processar o seu pedido!")
+                            setLoading(false)
+                        }
+                        console.log(fatura);
+                    }
+                }
+                catch {
+                    toast.error("Ocorreu um erro ao processar o seu pedido!")
+                    setLoading(false)
+                }
+                setLoading(false)
+            }
+        }
+
+    }
+    return { addToCart, cartLenght, payGPO, openTrans, setOpenTrans, clearCart, getCartProducts, getTotal, removeFromCart, openPay, setOpenPay, pay, loading, openAccount, setOpenAccount };
 }

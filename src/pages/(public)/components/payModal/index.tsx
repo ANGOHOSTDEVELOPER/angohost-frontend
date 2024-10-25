@@ -32,6 +32,8 @@ import api from "@/services/api"
 import axios from "axios"
 
 import { IEdgarResponse } from "../transferDomainModal"
+import PagamentoGpoDialog from "../pagamento/pagamento"
+import { storePagamentoGPO } from "../pagamento/hooks/storePagamento"
 
 interface Client {
     id: string;
@@ -142,6 +144,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
     const [loadingCreate, setLoadingCreate] = useState(false)
     const [openCreateAccount, setOpenCreateAccount] = useState(false)
     const [nif, setNif] = useState("")
+
     const { signMode, signInMode, clientLoadedInfo, isBILoaded, actions: {
         setSignMode,
         setClientNIF,
@@ -153,6 +156,8 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
     const { location } = usePayHosting()
 
     const { pay, loading, openAccount, setOpenAccount, openTrans, setOpenTrans } = useCart()
+
+    const {setOpenModalPagamentoGPO}=storePagamentoGPO()
     const { handleSubmit, register, formState: { errors } } = useForm<formType>({
         resolver: zodResolver(formSchema)
     })
@@ -183,7 +188,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
         const response = await signIn(form)
         if (response.success) {
             toast.success("Bem vindo!")
-            setOpenAccount(false)
+            setOpenAccount()
             setLoadingEntrar(false)
         }
         else {
@@ -379,12 +384,13 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                     </DialogHeader>
                     <Button disabled variant={"outline"} onClick={() => setOpenedExit(false)} className="h-[50px] items-center justify-center p-0"><div className="w-2/5 flex items-center justify-start"><img src={bai} className="w-[100px]" alt="bai paga" /></div> <div className="w-1/2 items-center justify-start flex">BAI Paga</div></Button>
                     <Button disabled variant={"outline"} onClick={() => setOpenedExit(false)} className="h-[50px] items-center justify-center p-0"><div className="w-2/5 flex items-center justify-start"><img src={paypal} className="w-[100px]" alt="bai paga" /></div> <div className="w-1/2 items-center justify-start flex">PayPal</div></Button>
-                    <Button disabled variant={"outline"} onClick={() => setOpenedExit(false)} className="h-[50px] items-center justify-center p-0"><div className="w-2/5 flex items-center justify-start"><img src={mcx} className="w-[120px]" alt="bai paga" /></div> <div className="w-1/2 items-center justify-start flex">GPO Express</div></Button>
+                    <Button variant={"outline"} onClick={setOpenModalPagamentoGPO} className="h-[50px] items-center justify-center p-0"><div className="w-2/5 flex items-center justify-start"><img src={mcx} className="w-[120px]" alt="bai paga" /></div> <div className="w-1/2 items-center justify-start flex  text-[#F78200]">MULTICAIXA Express</div></Button>
                     <Button variant={"outline"} onClick={() => setOpenTrans(true)} className="h-[50px] items-center justify-center p-0"><div className="w-2/5 flex items-center justify-start"><img src={express} className="w-[130px]" alt="bai paga" /></div> <div className="w-1/2 items-center justify-start flex">Transferência bancária</div></Button>
                     <Button variant={"outline"} onClick={() => setOpenedExit(false)} className="h-[50px] items-center justify-center p-0">Cancelar</Button>
                 </DialogContent>
             </Dialog>
 
+            <PagamentoGpoDialog/>
             <Dialog open={openTrans} >
                 <DialogContent className="sm:max-w-[425px] bg-white">
                     <DialogHeader>
@@ -440,7 +446,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                                 <Input type="text" autoFocus placeholder="Insira o seu NIF ou BI" onChange={(e) => setNif(e.target.value)} className="inputVerifyDomain w-full" />
                             </div>
                             <div className="w-full flex items-center justify-center gap-2 mt-2">
-                                <Button type="button" onClick={() => setOpenAccount(false)} variant={'outline'} className="w-1/2">Cancelar</Button>
+                                <Button type="button" onClick={() => setOpenAccount()} variant={'outline'} className="w-1/2">Cancelar</Button>
                                 <Button type="button" onClick={verifyNif} disabled={nif.length < 10} className="w-1/2 bg-[var(--primary)] hover:bg-[var(--primary)] flex items*center justify-center gap-2">{loadingVerify ? <TailSpin color="#fff" width={20} /> : <>Verificar<Search width={18} /></>}</Button>
                             </div>
                         </div>
@@ -461,7 +467,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                                 <Input type="password" placeholder="**********" {...register('password')} className="inputVerifyDomain w-full" />
                             </div>
                             <div className="w-full flex items-center justify-center gap-2 mt-3">
-                                <Button type="button" onClick={() => setOpenAccount(false)} variant={'outline'} className="w-1/2">Cancelar</Button>
+                                <Button type="button" onClick={() => setOpenAccount()} variant={'outline'} className="w-1/2">Cancelar</Button>
                                 <Button type="submit" disabled={loadingEntrar || !!errors.password || !!errors.clientRef} className="w-1/2 bg-[var(--primary)] hover:bg-[var(--primary)] flex items*center justify-center gap-2">{loadingEntrar ? <TailSpin color="#fff" width={20} /> : <>Entrar <LogIn width={18} /></>}</Button>
                             </div>
                         </div>
