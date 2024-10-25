@@ -5,6 +5,10 @@ import {create} from "zustand"
 
 interface ItorePagamento{
     openAccount:boolean, 
+    iFrameLoading:boolean,
+    setIFrameLoading:()=>void,
+    setTokenIFrame:(token:string)=>void,
+    tokenIFrane:string
     setOpenAccount:()=>void,
     openModalPagamentoGPO:boolean,
     setOpenModalPagamentoGPO:()=>void
@@ -15,7 +19,9 @@ interface ItorePagamento{
 
 export const storePagamentoGPO=create<ItorePagamento>((set)=>({
     openAccount:false,
-    
+    iFrameLoading:false,
+
+    tokenIFrane:"",
     openModalPagamentoGPO:false,
     setOpenModalPagamentoGPO() {
         set((state)=>({
@@ -25,6 +31,16 @@ export const storePagamentoGPO=create<ItorePagamento>((set)=>({
     setOpenAccount() {
         set((state)=>({
             openAccount:!state.openAccount
+        }))
+    },
+    setTokenIFrame(token) {
+        set(()=>({
+           tokenIFrane:token
+        }))
+    },
+    setIFrameLoading() {
+        set((state)=>({
+            iFrameLoading:!state.iFrameLoading
         }))
     },
 }))

@@ -2,6 +2,7 @@ import useStore from "@/contexts/useStore";
 import { storePagamentoGPO } from "@/pages/(public)/components/pagamento/hooks/storePagamento";
 import api from "@/services/api";
 import useUtils from "@/utils/useutils";
+import axios from "axios";
 import Cookies from "js-cookie"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -104,7 +105,16 @@ interface EmailItem {
     type: string;
 }
 
-
+interface TokenDetails {
+    id: string;
+    timeToLive: number;
+    url: string;
+}
+interface TokenResponse {
+    message: string;
+    success: boolean;
+    token: TokenDetails;
+}
 export default function useCart() {
 
     const router = useNavigate()
@@ -130,7 +140,7 @@ export default function useCart() {
     const [domainItem, setDomainItem] = useState<DomainItem | null>()
     const [hostingItem, setHostingItem] = useState<HostingItem | null>()
     const [emailItem, setEmailItem] = useState<EmailItem | null>()
-
+      const {setOpenModalPagamentoGPO,setTokenIFrame,setIFrameLoading}=storePagamentoGPO()
     function addToCart(product: IProduct) {
         const cart: ICartProductList = Cookies.get('cart')
             ? JSON.parse(Cookies.get('cart') as string)
@@ -331,6 +341,42 @@ export default function useCart() {
         }
 
     }
+    async function getFrameToken({ amount }: { amount: number }) {
+        try {
+
+            if (!isAuthenticated()) {
+                setOpenModalPagamentoGPO()
+                setOpenAccount()
+                // setLoading(false)
+            }
+            const response: TokenResponse = (
+                await axios.post("https://gpo.angohost.ao/api/pagamento", {
+                    amount,
+                })
+            ).data;
+           
+            return response;
+        } catch (error) {
+            console.error("Erro ao gerar o token:", error);
+            throw error;
+        }
+    }
+
+    const handlePagamento = async () => {
+
+        const payload = {
+            amount: getTotal()
+        };
+        setIFrameLoading()
+        await getFrameToken(payload)
+            .then((tokenData) => {
+                setTokenIFrame(tokenData.token.url);
+                setOpenModalPagamentoGPO()
+            })
+            .catch((err) => {
+                console.error("Erro:", err);
+            });
+    };
 
     async function payGPO() {
 
@@ -448,5 +494,5 @@ export default function useCart() {
         }
 
     }
-    return { addToCart, cartLenght, payGPO, openTrans, setOpenTrans, clearCart, getCartProducts, getTotal, removeFromCart, openPay, setOpenPay, pay, loading, openAccount, setOpenAccount };
+    return { addToCart, cartLenght, payGPO, openTrans, setOpenTrans, clearCart, getCartProducts, getTotal, removeFromCart, openPay, setOpenPay, pay, loading, openAccount, setOpenAccount,handlePagamento };
 }

@@ -1,23 +1,9 @@
-import Button from "@/components/Button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,DialogClose } from "@/components/ui/dialog";
-import useCart from "@/hooks/useCart";
 import { SocketIO } from "@/socket";
-import axios from "axios";
 import { CircleX } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { storePagamentoGPO } from "./hooks/storePagamento";
-import useUtils from "@/utils/useutils";
-
-interface TokenDetails {
-    id: string;
-    timeToLive: number;
-    url: string;
-}
-interface TokenResponse {
-    message: string;
-    success: boolean;
-    token: TokenDetails;
-}
+import useCart from "@/hooks/useCart";
 
 
 interface CallbackReference {
@@ -48,57 +34,26 @@ interface CallbackReference {
   }
   
 export default function PagamentoGpoDialog() {
-    const [token, setToken] = useState<string>(""); // Estado para armazenar a URL
 
-    const {openModalPagamentoGPO,setOpenModalPagamentoGPO,setOpenAccount}=storePagamentoGPO()
-    // const [openAccount, setOpenAccount] = useState(false)
-    const { isAuthenticated } = useUtils()
-    const {getTotal,payGPO}=useCart()
-    async function getFrameToken({ amount }: { amount: number }) {
-        try {
 
-            if (!isAuthenticated()) {
-                setOpenModalPagamentoGPO()
-                setOpenAccount()
-                // setLoading(false)
-            }
-            const response: TokenResponse = (
-                await axios.post("https://gpo.angohost.ao/api/pagamento", {
-                    amount,
-                })
-            ).data;
+    const {openModalPagamentoGPO,setOpenModalPagamentoGPO,tokenIFrane,setIFrameLoading}=storePagamentoGPO()
 
-            return response;
-        } catch (error) {
-            console.error("Erro ao gerar o token:", error);
-            throw error;
-        }
+    const {payGPO}=useCart()
+
+    const handleCloseDialogIframe=()=>{
+
+        setOpenModalPagamentoGPO()
+        setIFrameLoading()
     }
-    const payload = {
-        amount: getTotal()
-    };
-
-    const handlePagamento = async () => {
-        await getFrameToken(payload)
-            .then((tokenData) => {
-                console.log("Dados recebidos:", tokenData);
-                setToken(tokenData.token.url);
-            })
-            .catch((err) => {
-                console.error("Erro:", err);
-            });
-    };
 
     function receiveMessage(event: MessageEvent) {
         if (event.origin !== "https://pagamentonline.emis.co.ao") return;
-        console.log("Received from GPO: ", event.data);
+        
     }
 
     useEffect(() => {
         SocketIO.on("paymentProcessed", (data) => {
             const processamento:CallbackData=data
-            console.log("Pagamento processado:", data);
-
             if(processamento.status==="ACCEPTED"){
                 payGPO()
                 setOpenModalPagamentoGPO()
@@ -106,27 +61,25 @@ export default function PagamentoGpoDialog() {
 
         });
 
-        SocketIO.on("dev", (data) => {
-            console.log("testando dev:", data);
-        });
+       
         window.addEventListener("message", receiveMessage, false);
 
         return () => {
             SocketIO.off("paymentProcessed");
             window.removeEventListener("message", receiveMessage, false);
         };
-    }, [openModalPagamentoGPO]);
+    }, []);
 
     return (
         <>
             <Dialog open={openModalPagamentoGPO}>
-                <DialogContent className="sm:max-w-[60%]  bg-white">
+                <DialogContent className="sm:max-w-[40%]  bg-white">
                 <DialogHeader className="w-full flex flex-row items-center  justify-between">
                         <DialogTitle className="text-[#F78200]">MULTICAIXA Express</DialogTitle>
                         <DialogDescription className="text-black mt-2  sr-only">
                             Selecione o banco
                         </DialogDescription>
-                        <DialogClose onClick={setOpenModalPagamentoGPO}>
+                        <DialogClose onClick={handleCloseDialogIframe}>
                     <button className="bg-gray-400 rounded-md w-10 h-10  flex justify-center items-center text-white font-bold" type="button"   >
                     <CircleX />
                     </button>
@@ -135,9 +88,9 @@ export default function PagamentoGpoDialog() {
                 <div style={styles.container}>
                     <div style={styles.card}>
                         <div style={styles.iframeContainer}>
-                            {token && (
+                            {tokenIFrane && (
                                 <iframe
-                                    src={token}
+                                    src={tokenIFrane}
                                     style={styles.iframe}
                                     title="Pagamento"
                                 ></iframe>
@@ -145,12 +98,12 @@ export default function PagamentoGpoDialog() {
                         </div>
                     </div>
 
-                    <div className="mt-4 mb-4">
+                    {/* <div className="mt-4 mb-4">
                         
                         <Button  className="bg-[#F78200] font-medium px-8 py-3 rounded-md  text-white  " type="button" label="Efetivar Pagamento" onClick={handlePagamento}>
                             
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
                 </DialogContent>
                
