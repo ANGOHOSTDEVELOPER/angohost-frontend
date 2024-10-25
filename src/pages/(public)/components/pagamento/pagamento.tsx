@@ -73,7 +73,7 @@ export default function PagamentoGpoDialog() {
     return (
         <>
             <Dialog open={openModalPagamentoGPO}>
-                <DialogContent className="sm:max-w-[40%]  bg-white">
+                <DialogContent className="sm:max-w-[30%] h-[85vh]  bg-white">
                 <DialogHeader className="w-full flex flex-row items-center  justify-between">
                         <DialogTitle className="text-[#F78200]">MULTICAIXA Express</DialogTitle>
                         <DialogDescription className="text-black mt-2  sr-only">
@@ -119,28 +119,29 @@ const styles: { [key: string]: React.CSSProperties } = {
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        
+        height:"100%",
         flexDirection:"column",
         backgroundColor: "#f0f2f5", // cor de fundo mais clara e suave
       
     },
     card: {
         backgroundColor: "#fff",
-        padding: "20px", // mais espaçamento interno
+        padding: "3px", // mais espaçamento interno
         borderRadius: "12px", // bordas arredondadas maiores para um visual mais suave
         boxShadow: "0 8px 30px rgba(0, 0, 0, 0.15)", // sombra mais pronunciada para destaque
         width: "100%",
-        height:"100%"
+        height:"70vh"
         
     },
     iframeContainer: {
         position: "relative",
         paddingBottom: "56.25%", // para manter a proporção 16:9
-        height: 0,
+        height: "70vh",
         overflow: "hidden",
         marginBottom: "24px", // mais espaçamento abaixo do iframe
         borderRadius: "12px", // bordas arredondadas no iframe
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+        
 
         // sombra leve no iframe
     },
