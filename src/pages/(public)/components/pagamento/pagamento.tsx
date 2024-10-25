@@ -99,7 +99,7 @@ export default function PagamentoGpoDialog() {
             const processamento:CallbackData=data
             console.log("Pagamento processado:", data);
 
-            if(processamento.status==="REJECTED"){
+            if(processamento.status==="ACCEPTED"){
                 payGPO()
                 setOpenModalPagamentoGPO()
             }
