@@ -142,6 +142,8 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
     const [loadingEntrar, setLoadingEntrar] = useState(false);
     const [loadingCreate, setLoadingCreate] = useState(false);
     const [openCreateAccount, setOpenCreateAccount] = useState(false);
+
+   
     const [nif, setNif] = useState("");
 
     const {
@@ -186,8 +188,18 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
         resolver: zodResolver(registerSchema),
     });
 
-    const { iFrameLoading } = storePagamentoGPO();
+    const { iFrameLoading,setIFrameLoading } = storePagamentoGPO();
 
+
+    const handleCancellCreateAaccount=()=>{
+        setOpenCreateAccount(false)
+        setIFrameLoading()
+    }
+
+    const handleCancellOpenAaccount=()=>{
+        setOpenAccount()
+        setIFrameLoading()
+    }
     async function entrar(data: formType) {
         setLoadingEntrar(true);
         const form = {
@@ -217,6 +229,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
             toast.success("Bem vindo!");
             setOpenAccount();
             setLoadingEntrar(false);
+            setIFrameLoading()
         } else {
             toast.error("Verifique as suas credenciais");
             setLoadingEntrar(false);
@@ -249,6 +262,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                     clientRef: response.client.email,
                     password: data.senha,
                 });
+                setIFrameLoading()
                 setOpenCreateAccount(false);
             } else {
                 toast.error(response.message);
@@ -649,7 +663,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                                 <div className="w-full flex items-center justify-center gap-2 mt-2">
                                     <Button
                                         type="button"
-                                        onClick={() => setOpenAccount()}
+                                        onClick={handleCancellOpenAaccount}
                                         variant={"outline"}
                                         className="w-1/2"
                                     >
@@ -711,7 +725,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                                 <div className="w-full flex items-center justify-center gap-2 mt-3">
                                     <Button
                                         type="button"
-                                        onClick={() => setOpenAccount()}
+                                        onClick={handleCancellOpenAaccount}
                                         variant={"outline"}
                                         className="w-1/2"
                                     >
@@ -869,7 +883,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                             <div className="w-full flex items-center justify-center gap-2 mt-3">
                                 <Button
                                     type="button"
-                                    onClick={() => setOpenCreateAccount(false)}
+                                    onClick={handleCancellCreateAaccount}
                                     variant={"outline"}
                                     className="w-1/2"
                                 >
