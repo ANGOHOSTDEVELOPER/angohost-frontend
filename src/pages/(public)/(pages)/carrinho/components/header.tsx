@@ -21,7 +21,7 @@ export default function Header() {
 
     const { data, isLoading: isLoadingClock } = useQuery({
         queryKey: ["tempo-promo", "id"],
-        queryFn: () => buscarTempo("c967c40b-a0d9-4e07-b792-2584a9c2d5e4")
+        queryFn: () => buscarTempo("22fa65b7-a73c-4114-b67f-ed707ef27a4c")
     })
 
     async function tempoPub() {

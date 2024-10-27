@@ -1,45 +1,70 @@
 import "./styles.css"
 import imagem_banner from "@/assets/images/capa-home-angohost.png"
 import CountdownClock from "../relogio/relogio"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import api from "../../../../services/api"
 import { TailSpin } from "react-loader-spinner"
 import { GoArrowRight } from "react-icons/go"
 import { Link } from "react-router-dom"
 import { Check } from "lucide-react"
-import useTempo from "@/hooks/useTempo"
 
-// interface typeTempo{
-//     id:string
-//     tempo:string
-// }
+interface typeTempo{
+    id:string
+    tempo:string
+}
 
 export const BannerHome =  () => {
      
-    // const targetDate = "2024-07-22T23:59:59";
-    // const [targetDate,setTargetDate]=useState<string>("2024-09-30T23:59:59")
+    // // const targetDate = "2024-07-22T23:59:59";
+    // // const [targetDate,setTargetDate]=useState<string>("2024-09-30T23:59:59")
+    // const [time,setTime]=useState<typeTempo>()
 
-    const {tempoPromo}=useTempo()
+   
 
-    const buscarTempo=async (id:string)=>{
-        const tempo=await api.get(`/tempo/${id}`)
-        .then((response)=>response.data)
+    // const buscarTempo=async (id:string)=>{
+    //     const tempo=(await api.get(`/tempo/${id}`)).data
+    
+    //     return tempo
+    // }
+    // const {data,isLoading}=useQuery({
+    //     queryKey:["tempo-promo","id"],
+    //     queryFn:()=>buscarTempo("22fa65b7-a73c-4114-b67f-ed707ef27a4c")
+    // })
+
+    // // async function tempoPub(){
+    // //     const tempo:typeTempo= await data
+    // //     setTargetDate(tempo.tempo)
+    // // }
+    // useEffect(()=>{
+      
+    //     setTime(data)
+    // },[data])
+
+
+
+    const [targetDate, setTargetDate] = useState<string>("2024-07-22T23:59:59")
+
+    const buscarTempo = async (id: string) => {
+        const tempo = (await api.get(`/tempo/${id}`)).data
+           
         return tempo
     }
-    const {data,isLoading}=useQuery({
-        queryKey:["tempo-promo","id"],
-        queryFn:()=>buscarTempo("c967c40b-a0d9-4e07-b792-2584a9c2d5e4")
+
+    const { data, isLoading } = useQuery({
+        queryKey: ["tempo-promo", "id"],
+        queryFn: () => buscarTempo("22fa65b7-a73c-4114-b67f-ed707ef27a4c")
     })
 
-    // async function tempoPub(){
-    //     const tempo:typeTempo= await data
-    //     setTargetDate(tempo.tempo)
-    // }
-    useEffect(()=>{
-    //    tempoPub()
-    //     console.log(targetDate)
-    },[data])
+    async function tempoPub() {
+        const tempo: typeTempo = await data
+        setTargetDate(tempo.tempo)
+    }
+
+    useEffect(() => {
+        tempoPub()
+    }, [data])
+
 
     return (
         <div className="banner-home"  >
@@ -62,9 +87,9 @@ export const BannerHome =  () => {
                             <li className="flex justify-start items-center  text-zinc-600 gap-1  " > <Check width={24} color="#00B090" />Suporte ao cliente 24h</li>
 
                         </ul>
-                        <h4 className="banner-home-left-info-h4 text-red-500 text-2xl font-semibold ">Oferta por tempo limitado corra!</h4>
+                        <h4 className="banner-home-left-info-h4 text-red-500 text-2xl font-semibold ">Oferta por tempo limitado corra!</h4>
                         <div className="banner-home-left-info-button_container  " >
-                           {isLoading?<TailSpin color="red" width={20} />: <CountdownClock targetDate={tempoPromo} />}
+                           {isLoading?<TailSpin color="red" width={20} />: <CountdownClock targetDate={targetDate} />}
                            <Link className="h-[45px] ml-2 px-3 rounded-lg flex items-center justify-center hover:text-white" style={{ textDecoration: "none", background: 'linear-gradient(-90deg, rgb(43 6 67 / 85%), rgb(120 3 121), rgb(2, 18, 31))' }} to={"/Email-profissional"}>Começa agora <GoArrowRight /> </Link>
                         </div>
                        
