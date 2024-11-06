@@ -1,3 +1,4 @@
+import useItemStore from "@/contexts/planStore";
 import useStore from "@/contexts/useStore";
 import { storePagamentoGPO } from "@/pages/(public)/components/pagamento/hooks/storePagamento";
 import api from "@/services/api";
@@ -137,9 +138,14 @@ export default function useCart() {
         emailOK: false,
         planoOK: false
     })
-    const [domainItem, setDomainItem] = useState<DomainItem | null>()
-    const [hostingItem, setHostingItem] = useState<HostingItem | null>()
-    const [emailItem, setEmailItem] = useState<EmailItem | null>()
+
+    const {domainItem,emailItem, hostingItem,setDomainItem,setEmailItem,setHostingItem}=useItemStore()
+    // const [domainItem, setDomainItem] = useState<DomainItem | null>()
+    // const [hostingItem, setHostingItem] = useState<HostingItem | null>()
+    // const [emailItem, setEmailItem] = useState<EmailItem | null>()
+
+
+
       const {setOpenModalPagamentoGPO,setTokenIFrame,setIFrameLoading}=storePagamentoGPO()
     function addToCart(product: IProduct) {
         const cart: ICartProductList = Cookies.get('cart')
@@ -413,13 +419,16 @@ export default function useCart() {
                     setLoading(false)
                     setOpenTrans(false)
                     setOpenPay(false)
+                    setIFrameLoading()
                     clearCart()
                     router('/cliente/painel/dominios/servicos')
                 }
                 else {
                     toast.error("Ocorreu um erro ao processar o seu pedido!")
+                    setIFrameLoading()
                 }
                 setLoading(false)
+                setIFrameLoading()
             }
             else {
                 try {
@@ -475,11 +484,13 @@ export default function useCart() {
                             setLoading(false)
                             setOpenTrans(false)
                             setOpenPay(false)
+                            setIFrameLoading()
                             clearCart()
                             router('/cliente/painel/dashboard')
                         }
                         else {
                             toast.error("Ocorreu um erro ao processar o seu pedido!")
+                            setIFrameLoading()
                             setLoading(false)
                         }
                         console.log(fatura);
@@ -488,6 +499,7 @@ export default function useCart() {
                 catch {
                     toast.error("Ocorreu um erro ao processar o seu pedido!")
                     setLoading(false)
+                    setIFrameLoading()
                 }
                 setLoading(false)
             }
