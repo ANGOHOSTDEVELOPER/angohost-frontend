@@ -40,12 +40,12 @@ export default function PublicAccountDropdown({ color }: { color: string }) {
                 <Link style={{ color: color }} to='/contactos' className="bg-transparent text-[1rem] font-regular  cursor-pointer  flex items-center justify-center gap-1"><Headset strokeWidth={1.5} size={20} />Central de venda</Link>
             </MenubarMenu>
             <MenubarMenu>
-                <a style={{ color: color }} href="https://ajuda.angost.ao" className="ml-3 bg-transparent text-[1rem] font-regular  cursor-pointer  flex items-center justify-center gap-1"><Info strokeWidth={1.5} size={20} />Ajuda</a>
+                <a style={{ color: color }} href="https://ajuda.angohost.ao" className="ml-3 bg-transparent text-[1rem] font-regular  cursor-pointer  flex items-center justify-center gap-1"><Info strokeWidth={1.5} size={20} />Ajuda</a>
             </MenubarMenu>
             <MenubarMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <button className="w-max h-[40px] flex items-center justify-center gap-2 relative">
+                        <button className="w-full h-[40px] flex items-center justify-center gap-3 relative">
                             <ShoppingCart strokeWidth={1.5} size={20} color={color} /><p style={{color: color}} className="text-[1rem]">Carrinho</p>
                             {cartLenght > 0 && <div className="bg-[#0066a59f] text-[#ffffff] rounded-full w-[20px] h-[20px] flex items-center justify-center text-[0.8rem] font-semibold absolute top-[0px] right-[-10px]">{cartLenght}</div>}
                         </button>

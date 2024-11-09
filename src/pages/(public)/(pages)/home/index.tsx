@@ -7,8 +7,8 @@ import { Header } from "../../components/header";
 // import { PetrohostBanner } from "../../components/petrohost-banner";
 import { ListaDePlano } from "../../components/planos";
 import { SidesClientes } from "../../components/side_clientes";
-import { ContentHero } from "./components/conente-hero-primeiro";
-import { GlobeDemo } from "../../components/Globe";
+// import { ContentHero } from "./components/conente-hero-primeiro";
+//import { GlobeDemo } from "../../components/Globe";
 // import { GoogleGeminiEffectDemo } from "../../components/Gemini-Effect/GeminiEffect";
 import { TypewriterEffectSmoothDemo } from "../../components/Typewriter/Typewriter";
 import { useEffect } from "react";
@@ -36,9 +36,9 @@ export default function Home() {
             <BannerHome />
             <SidesClientes />
             <ListaDePlano />
-            <GlobeDemo/>
+           
             
-            <ContentHero />
+          
             {/* <BannerHeroSecond /> */}
           
             {/* <GoogleGeminiEffectDemo/> */}
