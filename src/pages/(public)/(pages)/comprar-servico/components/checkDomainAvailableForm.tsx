@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import usePayStore from "../../../../../contexts/payStore"
 import { useEffect, useState } from "react"
-import { domain, IDomainExtension } from "../../../../../interfaces/domain"
+// import { domain, IDomainExtension } from "../../../../../interfaces/domain"
+import {  IDomainExtension } from "../../../../../interfaces/domain"
 import { toast } from "sonner"
 import LoaderComponent from "../../../../cliente/components/loader/view"
 import useUtils from "../../../../../utils/useutils"
@@ -12,6 +13,7 @@ import { DomainStatusModal } from "@/pages/(public)/components/domainStatusModal
 import useCart from "@/hooks/useCart"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Skeleton from "react-loading-skeleton"
+import { IConvertDomainResponseToJson } from "@/utils/converterHtmlToJson"
 
 const formSchema = z.object({
     domain: z.string().min(3, 'Insira o domínio').regex(/^[a-zA-Z0-9-]{3,}$/, '')
@@ -62,9 +64,10 @@ export default function CheckDomainAvailableForm() {
             setIsLoading(true)
             setCurrentDomain(`${data.domain}${currentDomainExtension.tipo}`)
             try {
-                const json: domain = await checkDomain(`${data.domain}${currentDomainExtension.tipo}`)
-                if (!json.domain_status && json.nameservers.length === 0) {
+                const json: IConvertDomainResponseToJson = await checkDomain(`${data.domain}${currentDomainExtension.tipo}`)
+                if (json.availability && json.domain!="") {
                     toast.success('Dominio disponivel')
+
                     setCurrentDomainAvailable(true)
                 }
                 else {
@@ -72,6 +75,17 @@ export default function CheckDomainAvailableForm() {
                     setCurrentDomainAvailable(false)
                 }
                 setDomainVerifyProcessComplete(true)
+
+                // if (!json.domain_status && json.nameservers.length === 0) {
+                //     toast.success('Dominio disponivel')
+                //     setCurrentDomainAvailable(true)
+                // }
+                // else {
+                //     toast.error('DOminio indisponivel')
+                //     setCurrentDomainAvailable(false)
+                // }
+                // setDomainVerifyProcessComplete(true)
+
                 return json
             }
             catch (error) {

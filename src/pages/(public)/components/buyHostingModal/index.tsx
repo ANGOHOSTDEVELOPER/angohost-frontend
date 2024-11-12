@@ -19,7 +19,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Search } from "lucide-react"
 import useUtils from "@/utils/useutils"
 import usePayStore from "@/contexts/payStore"
-import { domain, IDomainExtension } from "@/interfaces/domain"
+// import { domain, IDomainExtension } from "@/interfaces/domain"
+import {  IDomainExtension } from "@/interfaces/domain"
 import { toast } from "sonner"
 import { TailSpin } from "react-loader-spinner"
 import Cookies from "js-cookie"
@@ -28,6 +29,7 @@ import { ExitModal } from "../exitModal"
 import useCart from "@/hooks/useCart"
 import axios from "axios"
 import { IEdgarResponse } from "../transferDomainModal"
+import { IConvertDomainResponseToJson } from "@/utils/converterHtmlToJson"
 
 interface ICreateModalProps {
     opened: boolean,
@@ -195,8 +197,18 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
             setLoaderLoading(true)
             setCurrentDomain(`${verifDomain}${selectedExtension.tipo}`)
             try {
-                const json: domain = await checkDomain(`${verifDomain}${selectedExtension.tipo}`)
-                if (!json.domain_status && json.nameservers.length === 0) {
+                const json: IConvertDomainResponseToJson = await checkDomain(`${verifDomain}${selectedExtension.tipo}`)
+                // if (!json.domain_status && json.nameservers.length === 0) {
+                //     toast.success('Domínio disponivel')
+                //     setCurrentDomainAvailable(true)
+                //     setOpenedStatus(true)
+                // }
+                // else {
+                //     toast.error('Domínio indisponivel')
+                //     setCurrentDomainAvailable(false)
+                // }
+
+                if (json.availability && json.domain!="") {
                     toast.success('Domínio disponivel')
                     setCurrentDomainAvailable(true)
                     setOpenedStatus(true)

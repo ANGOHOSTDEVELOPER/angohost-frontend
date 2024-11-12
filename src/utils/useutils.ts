@@ -1,10 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import axios from "axios";
-import ConvertToJson from "../services/convertToJson";
+// import ConvertToJson from "../services/convertToJson";
 import { ICliente } from "../interfaces/clientInterface";
 import api from './../services/api';
 import { IAdminSession, ISession } from "@/interfaces/session.interface";
+import { convertDomainResponseToJson } from "./converterHtmlToJson";
 
 export default function useUtils() {
 
@@ -22,10 +23,18 @@ export default function useUtils() {
 
     async function checkDomain(domain: string) {
         // await verificarDisponibilidaDeDominios(domain)
-        const response = await axios.get(`https://www.angohost.co.ao/buscar.php?domain=${domain}`)
-        const json = ConvertToJson(response.data)
+        // const response = await axios.get(`https://www.angohost.co.ao/buscar.php?domain=${domain}`)
+        // const json = ConvertToJson(response.data)
+        // return json
 
-        return json
+
+        const response= await  axios.get(`https://api4.angohost.ao/proxy/pleno.ao/source/App/DomainSearch.php?domain=${domain}`,{
+          
+        }).then(r=>r.data)
+        const data= convertDomainResponseToJson(response)
+        
+        console.log(data)
+        return data
     }
     // async function verificarDisponibilidaDeDominios(domain: string){
     //     const response=  (await axios.get(`https://www.angohost.co.ao/api4.php?dominio=${domain}`)).data
