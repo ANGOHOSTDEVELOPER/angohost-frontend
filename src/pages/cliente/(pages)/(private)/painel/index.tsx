@@ -11,6 +11,7 @@ import useUtils from '@/utils/useutils';
 import { useEffect } from 'react';
 import useClientStore from '@/contexts/clientStore';
 import { ICliente } from '@/interfaces/clientInterface';
+import {storeCreditoCliente} from "@/contexts/store_credito/creditoStore.tsx";
 
 
 export default function PanelLayout() {
@@ -20,14 +21,14 @@ export default function PanelLayout() {
     const { actions: { setClientData } } = useClientStore()
     const { data } = useClientData(getClientID())
 
+    const {getCreditoCliente}=storeCreditoCliente()
 
+  
     useEffect(()=>{
+        getCreditoCliente(getClientID())
         setClientData(data as ICliente)
     }, [data])
-
-
-
-
+    
     if (loading) {
         return <div className='w-full h-[100vh] bg-white flex items-center justify-center' >
             <p className='text-[#222] text-[0.8rem] font-regular'>ANGOHOST</p>

@@ -97,13 +97,6 @@ export default function PagamentoGpoDialog() {
                             )}
                         </div>
                     </div>
-
-                    {/* <div className="mt-4 mb-4">
-                        
-                        <Button  className="bg-[#F78200] font-medium px-8 py-3 rounded-md  text-white  " type="button" label="Efetivar Pagamento" onClick={handlePagamento}>
-                            
-                        </Button>
-                    </div> */}
                 </div>
                 </DialogContent>
                

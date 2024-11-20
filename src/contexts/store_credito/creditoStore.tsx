@@ -38,7 +38,8 @@ export  const storeCreditoCliente=create<ICreditoStore>((set=>({
         const data: IResponseAdicionarSaldoCliente=await (await api.put(`/credito/adicionarSaldo`,{
             idCliente:idCliente,
             saldo:saldo
-        })).data;
+        }
+        )).data;
         
         return data
        

@@ -270,6 +270,8 @@ export default function useCart() {
                     router('/cliente/painel/dominios/servicos')
                 }
                 else {
+                    
+                   
                     toast.error("Ocorreu um erro ao processar o seu pedido!")
                 }
                 setLoading(false)
@@ -318,12 +320,13 @@ export default function useCart() {
                         setLoading(false)
                     }
                     else {
-                        const response: { success: boolean } = await (await api.post('/faturas/compra', fatura, {
+                        const response = await api.post('/faturas/compra', fatura, {
                             headers: {
-                                Authorization: `Bearer ${getSessionToken()}`
-                            }
-                        })).data
-                        if (response.success) {
+                                Authorization: `Bearer ${getSessionToken()}`,
+                            },
+                            
+                        });
+                        if (response.data) {
                             toast.success("Compra efetuada com sucesso!")
                             setLoading(false)
                             setOpenTrans(false)
@@ -332,13 +335,15 @@ export default function useCart() {
                             router('/cliente/painel/dashboard')
                         }
                         else {
+                          
                             toast.error("Ocorreu um erro ao processar o seu pedido!")
                             setLoading(false)
                         }
                         console.log(fatura);
                     }
                 }
-                catch {
+                catch (error) {
+                    console.log(error)
                     toast.error("Ocorreu um erro ao processar o seu pedido!")
                     setLoading(false)
                 }
