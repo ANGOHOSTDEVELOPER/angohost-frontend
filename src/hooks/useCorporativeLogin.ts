@@ -42,7 +42,7 @@ export default function useCorporativeLogin() {
             telefone: '',
             senha: data.password,
             email: '',
-            tipo: 'Empresa'
+            tipo: 'empresa'
         }
         if (data.client_ref.includes('@')) {
             form.email = data.client_ref
