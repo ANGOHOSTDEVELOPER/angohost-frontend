@@ -207,13 +207,13 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
             telefone: "",
             tipo:
                 isBILoaded && signMode === 1
-                    ? "Particular"
+                    ? "particular"
                     : !isBILoaded && signMode === 1
-                    ? "Empresa"
+                    ? "empresa"
                     : signInMode === 1 && signMode === 2
-                    ? "Particular"
+                    ? "particular"
                     : signInMode === 2 && signMode === 2
-                    ? "Empresa"
+                    ? "empresa"
                     : "",
             senha: data.password,
         };
