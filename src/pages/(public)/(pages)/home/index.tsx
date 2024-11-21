@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { SocketIO } from "@/socket";
 import ModalCreditoPage from "@/pages/cliente/components/modalCredito";
 //import ModalManutencao from "@/pages/(public)/components/modals/modal-manutencao";
+
 export default function Home() {
     useEffect(()=>{
         SocketIO.on("connection", () => {
@@ -38,6 +39,7 @@ export default function Home() {
                 <title>Angohost - Hospedagem de Sites com Especialistas Angolanos</title>
             </Helmet>
             <Header />
+           
             <BannerHome />
             <SidesClientes />
             <ListaDePlano />
