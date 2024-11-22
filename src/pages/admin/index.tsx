@@ -4,6 +4,7 @@ import '@/pages/admin/styles/globals.css'
 import useUtils from '@/utils/useutils';
 import { Toaster } from "sonner";
 
+
 export default function AdminLayout() {
 
     const nav = useNavigate()
@@ -20,6 +21,9 @@ export default function AdminLayout() {
     }, [nav]);
 
     return (
-        <main className='h-wull h-screen'><Outlet/><Toaster richColors position="top-right"/></main>
+        <main className='h-wull h-screen'>
+            
+           
+            <Outlet/><Toaster richColors position="top-right"/></main>
     )
 }

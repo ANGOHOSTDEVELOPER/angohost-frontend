@@ -5,7 +5,6 @@ import logo from '/ANGOHOST-AZUL.png'
 import { Helmet } from "react-helmet";
 import LoaderComponent from "../../../components/loader/view";
 import useParticularLogin from "../../../../../hooks/useParticularLogin";
-
 export default function ParticularLogin() {
 
     const { errors, handleSubmit, loginParticular, register, isLoading, loading } = useParticularLogin()
@@ -18,7 +17,9 @@ export default function ParticularLogin() {
 
     return (
         <>
+          
             <Helmet><title>Login Particular</title></Helmet>
+          
             <div className="home_main empresa particular" style={{ height: 'calc(100vh' }}>
                 <div className="home_body">
                     <div className="left empresa particular relative" >

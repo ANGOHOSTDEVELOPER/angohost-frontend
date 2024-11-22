@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Toaster } from "sonner"
 import useUtils from '@/utils/useutils';
+import NeveComponent from '../(public)/components/neve/neve';
 
 export default function ClientLayout() {
 
@@ -22,6 +23,7 @@ export default function ClientLayout() {
     return (
         <div className='w-full h-[100vh]'>
             <Outlet />
+            <NeveComponent />
             <Toaster richColors position='top-right'/>
         </div>
     )

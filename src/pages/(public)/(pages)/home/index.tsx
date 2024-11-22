@@ -8,7 +8,6 @@ import { Header } from "../../components/header";
 import { ListaDePlano } from "../../components/planos";
 import { SidesClientes } from "../../components/side_clientes";
 // import { ContentHero } from "./components/conente-hero-primeiro";
-//import { GlobeDemo } from "../../components/Globe";
 // import { GoogleGeminiEffectDemo } from "../../components/Gemini-Effect/GeminiEffect";
 import { TypewriterEffectSmoothDemo } from "../../components/Typewriter/Typewriter";
 import { useEffect } from "react";
@@ -17,6 +16,8 @@ import ModalCreditoPage from "@/pages/cliente/components/modalCredito";
 //import ModalManutencao from "@/pages/(public)/components/modals/modal-manutencao";
 
 export default function Home() {
+   
+
     useEffect(()=>{
         SocketIO.on("connection", () => {
           console.log("Conectado ao servidor Socket.IO");
@@ -27,6 +28,9 @@ export default function Home() {
         } 
           
       })
+
+
+     
 
 
     

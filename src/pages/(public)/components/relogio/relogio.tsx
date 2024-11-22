@@ -16,7 +16,7 @@ const NumContainer = styled.div`
     height: 45px;
     width: 45px;
     border-radius: 0.7rem;
-    background: #23679a;
+    background: #ef4444;
     color: white;
     font-size: 0.9rem;
   }
@@ -74,8 +74,8 @@ const CountdownClock = ({ targetDate }: propsTargetDate) => {
 
     return (
         <div className="flex items-center h-full justify-center gap-1 text-[#23679a33] font-semibold text-[1.3rem]">
-            <NumContainer>
-                <span>{`${padWithZero(timeLeft.dias)}`}</span>
+            <NumContainer  >
+                <span  className="bg-red-400">{`${padWithZero(timeLeft.dias)}`}</span>
             </NumContainer> :
             <NumContainer>
                 <span>{`${padWithZero(timeLeft.horas)} `}</span>
