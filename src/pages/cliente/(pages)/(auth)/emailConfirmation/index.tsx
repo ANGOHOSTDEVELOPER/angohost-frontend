@@ -22,7 +22,7 @@ export default function EmailConfirm() {
         interval = setInterval(() => {
             setTimer((prev) => prev - 1)
             i--;
-            if (i === 0) {
+            if (i <=0) {
                 clearInterval(interval)
             }
 
@@ -97,7 +97,7 @@ export default function EmailConfirm() {
                                 <h1 style={{ lineHeight: '30px' }} className="text-slate-700">{clientRef.includes('@') ? "Verifique a sua caixa de entrada" : "Verifique a sua caixa de mensagens"}</h1>
                                 <p>{clientRef.includes('@') ? "Um e-mail foi enviando para a sua caixa de entrada" : "Uma sms foi enviada para o seu terminal"}</p>
                             </div>
-                            <img src={icon} className="w-[250px] my-4 mt-8" />
+                            <img  alt="senha-renviar" src={icon} className="w-[250px] my-4 mt-8" />
                             <button type="button" onClick={restartInterval} disabled={timer != 0 || isLoading} className="border-solid transition-colors duration-300 disabled:bg-transparent flex items-center justify-center bg-slate-800 disabled:text-slate-800 text-white border-[1px] border-slate-800 w-full h-[45px] text-[0.9rem] mt-4 rounded-[12px]">{isLoading ? <TailSpin color="#222" width={20} /> : (timer != 0 ? <>Reenvie em {timer}</> : "Reenviar ")}</button>
                         </form>
                         <p className="basic_text not_found_footer text-gray-600">
