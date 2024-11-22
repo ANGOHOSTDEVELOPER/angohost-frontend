@@ -21,11 +21,11 @@ export default function NeveComponent(){
         <>
         {snowflakeImage && (
         <Snowfall
-          radius={[5, 25]}
+          radius={[2, 7]}
           speed={[0.5,0.1]}
           wind={[0.1,0.9]}
-          images={[snowflakeImage]}
-          snowflakeCount={100}
+          
+          snowflakeCount={150}
           color='#fff'
          key={"neves"}
         />
