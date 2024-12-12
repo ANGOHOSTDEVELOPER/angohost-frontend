@@ -1,6 +1,6 @@
-import { CardContainer } from '@/components/ui/3d-card';
+
+import { PricingCard } from '@/pages/(public)/components/card-plano';
 import CardMicrosoftOffice from '@/pages/(public)/components/cards-angohost/card-microsoft-office-360';
-import useUtils from '@/utils/useutils';
 import React from 'react';
 
 interface CardProps {
@@ -8,7 +8,7 @@ interface CardProps {
   price: number;
   priceDetail: string;
   description: string[];
-  buttonLabel: string;
+  
   link: string;
   features: string[];
 }
@@ -17,12 +17,12 @@ export const CardPlanoMicrosoft: React.FC<CardProps> = ({
   title,
   price,
   priceDetail,
-  buttonLabel,
+
   link,
   features,
 }) => {
 
-    const {formatMoney}=useUtils()
+    //const {formatMoney}=useUtils()
 
     // const servicesCard1 = [
     //   { name: "Exchange", icon: "/microsoft-icons/BP-Exchange_RE46TV5.webp", link: "#" },
@@ -62,9 +62,9 @@ export const CardPlanoMicrosoft: React.FC<CardProps> = ({
   
 
   return (
-    <CardContainer>
+   
     <div className=" cursor-pointer border p-6 rounded-lg shadow-lg max-w-sm mx-auto">
-      <h2 className="text-xl font-semibold text-gray-800 mb-2">{title}</h2>
+      {/* <h2 className="text-xl font-semibold text-gray-800 mb-2">{title}</h2>
       <div className="text-3xl font-bold text-blue-600">{formatMoney(price)}</div>
       <div className="text-sm text-gray-500">{priceDetail}</div>
       <div className="my-4">
@@ -83,11 +83,12 @@ export const CardPlanoMicrosoft: React.FC<CardProps> = ({
             {feature}
           </li>
         ))}
-      </ul>
+      </ul> */}
+      <PricingCard id={"testes"} precoComDesconto={0}  link={()=>{}} planoPopular={true} recursos={features} preco={price} titulo={title} descontos={0} cicle={link}descricao={priceDetail}/>
       <CardMicrosoftOffice title="Plano 1" services={servicesCard1} apps={appsCard1} />
 
     </div>
-    </CardContainer>
+   
   );
 };
 

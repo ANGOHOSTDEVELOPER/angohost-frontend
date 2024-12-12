@@ -5,6 +5,8 @@ header {
 
     background: #edf3f8;
     padding-bottom: 15px;
+
+    padding-inline: 15px;
 }
 
 .navbar a {
@@ -12,6 +14,7 @@ header {
     text-decoration: none;
     margin: 0 15px;
     font-size: 16px;
+
 }
 
 .navbar a:hover {

@@ -1,7 +1,6 @@
 import {
     Building,
     Headset,
-    Info,
     LogOut,
     ShoppingCart,
     Trash,
@@ -39,9 +38,9 @@ export default function PublicAccountDropdown({ color }: { color: string }) {
             <MenubarMenu >
                 <Link style={{ color: color }} to='/contactos' className="bg-transparent text-[1rem] font-regular  cursor-pointer  flex items-center justify-center gap-1"><Headset strokeWidth={1.5} size={20} />Central de venda</Link>
             </MenubarMenu>
-            <MenubarMenu>
+            {/* <MenubarMenu>
                 <a style={{ color: color }} href="https://ajuda.angohost.ao" className="ml-3 bg-transparent text-[1rem] font-regular  cursor-pointer  flex items-center justify-center gap-1"><Info strokeWidth={1.5} size={20} />Ajuda</a>
-            </MenubarMenu>
+            </MenubarMenu> */}
             <MenubarMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -60,7 +59,7 @@ export default function PublicAccountDropdown({ color }: { color: string }) {
             </MenubarMenu>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <button style={{ color: color }} className=" text-[1rem] flex items-center justify-center gap-1 ml-3"><User strokeWidth={1.5} size={20} /> {isAuthenticated() ? "Minha conta" : "Entrar"}</button>
+                    <button type="button" style={{ color: color }} className=" text-[1rem] flex items-center justify-center gap-1 ml-3"><User strokeWidth={1.5} size={20} /> {isAuthenticated() ? "Minha conta" : "Entrar"}</button>
                 </DropdownMenuTrigger>
                 {isAuthenticated() ? <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel className="text-[0.95rem]">Minha conta</DropdownMenuLabel>

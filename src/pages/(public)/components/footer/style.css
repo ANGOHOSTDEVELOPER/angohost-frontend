@@ -1,8 +1,10 @@
 .container-footer-foo {
-    background: linear-gradient(-900deg,#3e00b0 12%, #450153 100% );
+    background: #121212;
     color: white;
     padding: 20px 200px;
 }
+
+/* linear-gradient(-900deg,#3e00b0 12%, #450153 100% ) */
 
 .top-bar {
     display: flex;

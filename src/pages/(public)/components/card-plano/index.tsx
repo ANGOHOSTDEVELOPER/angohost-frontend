@@ -43,7 +43,7 @@ export const PricingCard = ({ planoPopular, preco,  recursos,titulo , cicle,desc
        <p>{formatMoney(preco)}<span>{cicle}</span></p>
        </div>
        <p className="price-plane-info">{info}</p>
-        <button className="w-full h-[45px] rounded-[12px] bg-[#fff]"  style={{textDecoration:"none", color: planoPopular ? "" :"#fff", background: planoPopular ? "" : "linear-gradient(90deg, #450153 12%, #3e00b0 90%)"}} onClick={link}>Selecionar plano</button>
+        <button className="w-full h-[45px] rounded-[12px] bg-[#fff]"  style={{textDecoration:"none", color: planoPopular ? "" :"#fff", background: planoPopular ? "" : "#121212"}} onClick={link}>Selecionar plano</button>
         <div className="separator"/>
         <ul className="list-feature"  >
           {recursos.map((recurso, index) => (

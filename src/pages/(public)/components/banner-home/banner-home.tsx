@@ -2,7 +2,7 @@ import "./styles.css";
 //import imagem_banner from "@/assets/images/capa-home-angohost.png"
 import imagem_banner_natal from "@/assets/images/banner_natal.jpg";
 import CountdownClock from "../relogio/relogio";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../../services/api";
 import { TailSpin } from "react-loader-spinner";
@@ -67,13 +67,15 @@ export const BannerHome = () => {
             <main className="w-full">
                 <div className="w-full relative">
                     <NeveComponent />
+                    <Suspense fallback={<div>Loading...</div>}>
                     <img
                         className="w-[100%]"
                         src={imagem_banner_natal}
                         alt="banner natal"
                     />
+                    </Suspense>
 
-                    <div className="absolute  flex justify-center flex-col  items-center inset-0 bg-gray-950 bg-opacity-60  top-0 left-0 w-[100%] h-[100%] z-50">
+                    <div className="absolute  flex justify-center flex-col  items-center inset-0 bg-gray-950 bg-opacity-60  top-0 left-0 w-[100%] h-[100%] z-2">
                         <div className="w-1/2 flex flex-col items-center justify-center"  >
                         <h3 className="text-3xl sm:text-4xl font-bold mb-4 text-white  text-center">
     🎄 Aproveite o Espírito Natalino para Impulsionar seu Negócio Online com a <strong>Angohost</strong>! 🎄

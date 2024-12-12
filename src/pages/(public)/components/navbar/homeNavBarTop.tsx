@@ -141,7 +141,7 @@ export const HomeNavBarTop = ({ logo, color }: propsNavBarTopColor) => {
             <div className="flex items-center justify-center gap-2">
                 <Link to={"/"} >
                     <img width="150" height="auto"
-                        src={logo} />
+                        src={logo} alt="logo angohost" />
                 </Link>
                 <NavigationMenu className="z-50 mt-2.5">
                     <NavigationMenuList>

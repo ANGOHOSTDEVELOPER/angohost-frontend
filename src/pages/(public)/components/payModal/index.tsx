@@ -464,7 +464,7 @@ export function PayModal({ openedExit, setOpenedExit }: IExitModalProps) {
                     </Button>
                     <Button
                         variant={"outline"}
-                        disabled={iFrameLoading}
+                        disabled={true}
                         onClick={handlePagamento}
                         className="h-[50px] items-center justify-center p-0"
                     >

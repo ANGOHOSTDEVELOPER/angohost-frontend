@@ -200,7 +200,7 @@ const PaginaEmailOffice365 = () => {
           price={plan.price}
           priceDetail={plan.priceDetail}
           description={[]}
-          buttonLabel={plan.buttonLabel}
+         
           link={plan.link}
           features={plan.features}
         />

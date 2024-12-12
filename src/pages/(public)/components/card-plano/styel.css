@@ -20,15 +20,18 @@
   min-width: 370px;
 
 }
-.pricing-card.pricing-card-m {
+/* .pricing-card.pricing-card-m {
   background: linear-gradient(0deg,#3e00b0 12%, #450153 100% );
-}
+} */
 
+.pricing-card.pricing-card-m {
+    background: #121212;
+  }
 /* Estilize o título da carta */
 .pricing-card h3 {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #0e3f7b;
+  color: #121212;
   width: 100%;
   text-align: left;
 }
@@ -46,7 +49,7 @@
   width: 100%;
   text-align: left;
   font-size: 0.8rem;
-  color: #051931;
+  color: #121212;
 }
 .pricing-card-m .pricing-card-description {
   color: #fff;
@@ -137,7 +140,7 @@
     align-items: center;
 }
 .price-plane-info {
-    color: #0e3f7b;
+    color: #121212;
     font-size: 0.8rem;
     text-align: left;
     font-weight: 500;
@@ -150,7 +153,7 @@
     text-align: center;
     font-size: 50px !important;
     font-weight:bold;
-    color: #0e3f7b !important;
+    color: #121212 !important;
     margin-bottom: 0px;
     text-align: left !important;
     width: 100%;

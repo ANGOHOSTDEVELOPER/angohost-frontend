@@ -12,7 +12,7 @@ import { SidesClientes } from "../../components/side_clientes";
 import { TypewriterEffectSmoothDemo } from "../../components/Typewriter/Typewriter";
 import { useEffect } from "react";
 import { SocketIO } from "@/socket";
-import ModalCreditoPage from "@/pages/cliente/components/modalCredito";
+//import ModalCreditoPage from "@/pages/cliente/components/modalCredito";
 //import ModalManutencao from "@/pages/(public)/components/modals/modal-manutencao";
 
 export default function Home() {
@@ -57,7 +57,7 @@ export default function Home() {
             {/* <PetrohostBanner /> */}
             <Footer />
 
-            <ModalCreditoPage/>
+           
         </>
     )
 }

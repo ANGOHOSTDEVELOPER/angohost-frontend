@@ -18,19 +18,21 @@ export const Header = () => {
         getDomainExtensions()
     }, [])
 
+
+    //const linearGradient="'linear-gradient(90deg, #450153 12%, #3e00b0 90%)'"
     return (
         <>
             <header onClick={(e) => e.stopPropagation()} >
                 <HomeNavBarTop logo={LOGOAZUL} color={"#0e3f7b"} />
                 <div className="rounded-lg">
                     <NavMenu />
-                    <div className="search-bar mt-1 " style={{ background: 'linear-gradient(90deg, #450153 12%, #3e00b0 90%)' }}>
+                    <div className="search-bar mt-1 rounded-md" style={{ background:"#121212"  }}>
                         {/* <form className="form-input-seach">
                             <p className="label-input-search">Pesquise o nome de domínio perfeito para si!</p>
                             <input className="input-domino-verificar" value={site} onChange={(e) => setSite(e.target.value)} type="text" placeholder="nomedasuaempresa.ao" />
                             <a style={{ textDecoration: "none" }} href={''}>Verificar domínio</a>
                         </form> */}
-                        <div className="prices">
+                        <div className="prices"  >
                             {domainExtensions && domainExtensions.slice(0, 5).map((domain, _index) => (
                                 <div key={_index} className="price">
                                     <h2>{domain.tipo}</h2>
