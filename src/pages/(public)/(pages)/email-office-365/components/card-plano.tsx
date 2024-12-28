@@ -4,22 +4,31 @@ import CardMicrosoftOffice from '@/pages/(public)/components/cards-angohost/card
 import React from 'react';
 
 interface CardProps {
-  title: string;
-  price: number;
-  priceDetail: string;
-  description: string[];
-  
-  link: string;
-  features: string[];
+    id:string,
+    titulo:string, 
+    preco: number,
+    info?: string,
+    cicle: string,
+    recursos:string[],
+    planoPopular:boolean,
+    descricao:string,
+    descontos?:number,
+    precoComDesconto?:number,
+    link: () => void
 }
 
 export const CardPlanoMicrosoft: React.FC<CardProps> = ({
-  title,
-  price,
-  priceDetail,
+ cicle,
+ descontos=0,
+ descricao,
+ id,
+ link,
+ planoPopular,
+ preco,
+ precoComDesconto=0,
+ recursos,
+ titulo,
 
-  link,
-  features,
 }) => {
 
     //const {formatMoney}=useUtils()
@@ -84,7 +93,7 @@ export const CardPlanoMicrosoft: React.FC<CardProps> = ({
           </li>
         ))}
       </ul> */}
-      <PricingCard id={"testes"} precoComDesconto={0}  link={()=>{}} planoPopular={true} recursos={features} preco={price} titulo={title} descontos={0} cicle={link}descricao={priceDetail}/>
+      <PricingCard id={id} precoComDesconto={precoComDesconto}  link={link} planoPopular={planoPopular} recursos={recursos} preco={preco} titulo={titulo} descontos={descontos} cicle={cicle}descricao={descricao}/>
       <CardMicrosoftOffice title="Plano 1" services={servicesCard1} apps={appsCard1} />
 
     </div>

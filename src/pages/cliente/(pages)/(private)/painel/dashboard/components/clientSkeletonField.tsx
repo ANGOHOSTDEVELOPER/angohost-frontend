@@ -18,7 +18,7 @@ export default function ClientInfoFiled() {
                 <p className="font-[Rubik] text-black font-[500]" style={{ lineHeight: 0, fontSize: '0.9rem' }}>{parseClientName(client.nome)}</p>
                 <p className="font-[Rubik] text-black opacity-60" style={{ lineHeight: 0, fontSize: '0.8rem' }}>{getAuthenticatedUser()}</p>
             </div>
-            <img src={image} className='w-[45px] h-[45px] rounded-full' />
+            <img alt="cliente" src={image} className='w-[45px] h-[45px] rounded-full' />
         </div>
         :
         <div className="text-[#fff] font-regular flex flex-row-reverse items-center gap-2 text-[0.8rem] py-[10px]">

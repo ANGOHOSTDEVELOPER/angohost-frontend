@@ -146,37 +146,64 @@ export default function InvoicesView() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {selectedFatura.faturaProdutos && selectedFatura.faturaProdutos.slice().reverse().map((produto, _index) => (
-                                    produto.dominioId ? (
-                                        <TableRow key={_index}>
-                                            <TableCell className="font-medium">{produto.id}</TableCell>
-                                            <TableCell>{selectedFatura.status}</TableCell>
-                                            <TableCell>{produto.dominio?.dominio}</TableCell>
-                                            <TableCell className="text-right">kz {formatMoney(produto.preco)}</TableCell>
-                                        </TableRow>
-                                    )
-                                    :
-                                    produto.emailId ? (
-                                        (
-                                            <TableRow key={_index}>
+                                {selectedFatura.faturaProdutos && selectedFatura.faturaProdutos.slice().reverse().map((produto, _index) =>
+                                
+                                {
+                                    return (
+                                        <>
+                                       { produto.dominioId && (
+                                            <TableRow key={_index+produto.dominioId}>
                                                 <TableCell className="font-medium">{produto.id}</TableCell>
                                                 <TableCell>{selectedFatura.status}</TableCell>
-                                                <TableCell>Serviço de e-Mail: {produto.quantidade} {produto.quantidade > 1 ? 'contas' : 'conta'}</TableCell>
-                                                <TableCell className="text-right">{formatMoney(produto.preco)}</TableCell>
-                                            </TableRow>
-                                        )
-                                    )
-                                        :
-                                        (
-                                            <TableRow key={_index}>
-                                                <TableCell className="font-medium">{produto.id}</TableCell>
-                                                <TableCell>{selectedFatura.status}</TableCell>
-                                                <TableCell>{produto.plano.titulo}</TableCell>
+                                                <TableCell>{produto.dominio?.dominio}</TableCell>
                                                 <TableCell className="text-right">kz {formatMoney(produto.preco)}</TableCell>
                                             </TableRow>
-                                        )
+                                        )}
 
-                                ))}
+                                         { produto.emailId && (
+                                            (
+                                                <TableRow key={_index+produto.emailId}>
+                                                    <TableCell className="font-medium">{produto.id}</TableCell>
+                                                    <TableCell>{selectedFatura.status}</TableCell>
+                                                    <TableCell>Serviço de e-Mail: {produto.quantidade} {produto.quantidade > 1 ? 'contas' : 'conta'}</TableCell>
+                                                    <TableCell className="text-right">{formatMoney(produto.preco)}</TableCell>
+                                                </TableRow>
+                                            )
+                                        )}
+
+                                        {  produto.planoId
+                                            &&
+                                            (
+                                                <TableRow key={_index+produto.planoId}>
+                                                    <TableCell className="font-medium">{produto.id}</TableCell>
+                                                    <TableCell>{selectedFatura.status}</TableCell>
+                                                    <TableCell>{produto.plano.titulo}</TableCell>
+                                                    <TableCell className="text-right">kz {formatMoney(produto.preco)}</TableCell>
+                                                </TableRow>
+                                        )}
+                                         {
+                                            produto.planoMicrosoftExchangeId && (
+                                                <TableRow key={_index+produto.planoMicrosoftExchangeId}>    
+                                                <TableCell className="font-medium">{produto.planoMicrosoftExchange.id}</TableCell>
+                                                <TableCell>{selectedFatura.status}</TableCell>
+                                                <TableCell>{produto.planoMicrosoftExchange.titulo}</TableCell>
+                                                <TableCell className="text-right">kz {formatMoney(produto.preco)}</TableCell>
+                                            </TableRow>
+                                            )
+                                         }
+
+
+                                        </>
+
+                                        
+                                      
+                                      
+                                    )
+                                }
+                                
+                                
+
+                                )}
                             </TableBody>
                         </Table>
                         <div className='w-full flex items-end justify-center flex-grow-[1]'>

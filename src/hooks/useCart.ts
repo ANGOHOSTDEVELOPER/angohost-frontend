@@ -23,6 +23,7 @@ type IFactProduct = {
     planoHospedagemId: unknown,
     planoDominioId?: unknown,
     planoEmailId?: unknown,
+    planoMicrosoftExchangeId?:unknown,
     quantidade?: unknown,
 }
 type IFact = {
@@ -30,6 +31,7 @@ type IFact = {
     total: number,
     idCliente: string | number | undefined,
     idCiclo: string | number | undefined,
+   
     dominio: string | undefined,
     endereco: {
         pais: string | undefined,
@@ -43,10 +45,12 @@ type IFact = {
         planoHospedagemId?: unknown,
         planoDominioId?: unknown,
         planoEmailId?: unknown,
+        planoMicrosoftExchangeId:unknown
     },
     planoOK: boolean,
     dominioOK: boolean,
     emailOK: boolean,
+    planoMicrosoftExchangeOK:boolean,
     infoEmail: {
         dominio?: string | undefined,
         preco: number,
@@ -93,7 +97,18 @@ interface HostingItem {
     extensionId: string;
     type: string;
 }
-
+interface MicrosoftExchangeItem {
+    id: string;
+    name: string;
+    price: number;
+    planId: string;
+    domain: string;
+    cicle: number;
+    cicleId: string;
+    newDomain: boolean;
+    extensionId: string;
+    type: string;
+}
 interface EmailItem {
     id: string;
     name: string;
@@ -133,13 +148,15 @@ export default function useCart() {
         planoOK: boolean,
         dominioOK: boolean,
         emailOK: boolean,
+        planoMicrosoftExchangeOK:boolean
     }>({
         dominioOK: false,
         emailOK: false,
-        planoOK: false
+        planoOK: false,
+        planoMicrosoftExchangeOK:false
     })
 
-    const {domainItem,emailItem, hostingItem,setDomainItem,setEmailItem,setHostingItem}=useItemStore()
+    const {domainItem,emailItem, hostingItem,setDomainItem,setEmailItem,setHostingItem,exchangeItem,setExchangeItem}=useItemStore()
     // const [domainItem, setDomainItem] = useState<DomainItem | null>()
     // const [hostingItem, setHostingItem] = useState<HostingItem | null>()
     // const [emailItem, setEmailItem] = useState<EmailItem | null>()
@@ -221,6 +238,14 @@ export default function useCart() {
                 }));
                 setHostingItem(item as unknown as HostingItem)
             }
+
+            else if (item.type === "exchange") {
+                setSets((prevState) => ({
+                    ...prevState,
+                    planoMicrosoftExchangeOK: true
+                }));
+                setExchangeItem(item as unknown as MicrosoftExchangeItem )
+            }
             else if (item.type === "domain") {
                 setSets((prevState) => ({
                     ...prevState,
@@ -286,6 +311,7 @@ export default function useCart() {
                             planoHospedagemId: hostingItem?.planId,
                             planoDominioId: domainItem?.id,
                             planoEmailId: emailItem?.id,
+                            planoMicrosoftExchangeId:exchangeItem?.planId,
                             quantidade: emailItem?.emailQuantity
                         }],
                         total: getTotal(),
@@ -302,6 +328,7 @@ export default function useCart() {
                         planoOK: sets.planoOK,
                         dominioOK: sets.dominioOK,
                         emailOK: sets.emailOK,
+                        planoMicrosoftExchangeOK:sets.planoMicrosoftExchangeOK,
                         infoEmail: {
                             dominio: emailItem?.domain,
                             preco: emailItem?.price || 0,
@@ -310,9 +337,11 @@ export default function useCart() {
                         ids: {
                             planoDominioId: domainItem?.id || 0,
                             planoEmailId: emailItem?.planId,
-                            planoHospedagemId: hostingItem?.planId
+                            planoHospedagemId: hostingItem?.planId,
+                            planoMicrosoftExchangeId:exchangeItem?.planId
                         },
-                        idCiclo: hostingItem?.cicleId,
+                        idCiclo: hostingItem?.cicleId ?? exchangeItem?.cicleId,
+                        
                         status:"PENDENTE"
                     }
                     if (!isAuthenticated()) {
@@ -445,6 +474,7 @@ export default function useCart() {
                             planoHospedagemId: hostingItem?.planId,
                             planoDominioId: domainItem?.id,
                             planoEmailId: emailItem?.id,
+                            planoMicrosoftExchangeId:exchangeItem?.id,
                             quantidade: emailItem?.emailQuantity
                         }],
                         total: getTotal(),
@@ -461,6 +491,7 @@ export default function useCart() {
                         planoOK: sets.planoOK,
                         dominioOK: sets.dominioOK,
                         emailOK: sets.emailOK,
+                        planoMicrosoftExchangeOK:sets.planoMicrosoftExchangeOK,
                         infoEmail: {
                             dominio: emailItem?.domain,
                             preco: emailItem?.price || 0,
@@ -469,6 +500,7 @@ export default function useCart() {
                         ids: {
                             planoDominioId: domainItem?.id || 0,
                             planoEmailId: emailItem?.planId,
+                            planoMicrosoftExchangeId:exchangeItem?.id,
                             planoHospedagemId: hostingItem?.planId
                         },
                         idCiclo: hostingItem?.cicleId,

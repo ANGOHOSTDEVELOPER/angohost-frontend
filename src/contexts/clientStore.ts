@@ -4,6 +4,7 @@ import api from '../services/api'
 import { IServicoPlano } from '../interfaces/servico.interface'
 import { IClienteDominio, IDominio, IPlanoDominio } from '@/interfaces/dominio.interface'
 import { IServicoEmail } from '@/interfaces/email.interface'
+import { IServicosMicrosoftExchange } from '@/repositories/types'
 
 interface ICredentials {
     username: string;
@@ -61,23 +62,28 @@ type ClientAction = {
     setClientData: (clientData: ICliente) => void,
     getPlans: (clientID: string) => Promise<{ success: boolean }>,
     getDomainsServices: (clienteID: string) => Promise<{ success: boolean }>
+    getMicrosoftExchangeServices: (clienteID: string) => Promise<{ success: boolean }>
     setCurrentPlan: (plan: IServicoPlano) => void,
     setCurrentDomainService: (domain: IClienteDominio) => void
     getCredentials: (clientId: string, service: { id: string, type: string }, token: string) => void
     setClientDomainServices: (clientDomains: IClienteDominio[]) => void
     setClientPlans: (clientPlans: IServicoPlano[]) => void
     setClientEmails: (clientEmails: IServicoEmail[]) => void
+    setClienMicrosoftExchanges: (microsoftExchanges: IServicosMicrosoftExchange[]) => void
     setCurrentEmailService: (email: IServicoEmail) => void
+    setCurrentMicrosoftExchangeService: (microsoftExchange: IServicosMicrosoftExchange) => void
 }
 
 interface TypeClientStore {
     client: ICliente | null;
     plans: IServicoPlano[],
+    planoMicrosoftExchange: IServicosMicrosoftExchange[],
     emails: IServicoEmail[],
     domainServices: IClienteDominio[],
     currentDomainService: IClienteDominio,
     currentEmailService: IServicoEmail,
     currentPlan: IServicoPlano,
+    currentMicrosoftExchangeService: IServicosMicrosoftExchange | null,
     credentials: ICredentials | null
     actions: ClientAction
 }
@@ -93,12 +99,19 @@ interface IGetDomainsResponse {
     message: string;
     data: IClienteDominio[];
 }
+interface IGetMicrosoftExchangeResponse {
+    success: boolean,
+    message: string,
+    data: IServicosMicrosoftExchange[]
+}
 
 const useClientStore = create<TypeClientStore>((set) => ({
     client: null,
     plans: [],
     domainServices: [],
     emails: [],
+    planoMicrosoftExchange: [],
+    currentMicrosoftExchangeService: null,
     currentEmailService: defaultEmailService,
     currentDomainService: defaultClienteDominio,
     credentials: { clienteId: "", email: "", id: "", senha: "", username: "" },
@@ -124,9 +137,25 @@ const useClientStore = create<TypeClientStore>((set) => ({
                 return { success: false }
             }
         },
+        getMicrosoftExchangeServices: async (clientID: string): Promise<{ success: boolean }> => {
+            try {
+                const response: IGetMicrosoftExchangeResponse = await (await api.get(`/servicosMicrosoftExchangeCliente/buscarServicoMicrosoftExchangeCliente/${clientID}`)).data
+                set({ planoMicrosoftExchange: response.data })
+                console.log(response);
+                return { success: true }
+            }
+            catch {
+                return { success: false }
+            }
+        },
+        setClienMicrosoftExchanges(microsoftExchanges) {
+            set({ planoMicrosoftExchange: microsoftExchanges })
+        },
+
         setCurrentPlan(plan) {
             set({ currentPlan: plan })
         },
+        
         getDomainsServices: async (clientID: string): Promise<{ success: boolean }> => {
             try {
                 const response: IGetDomainsResponse = await (await api.get(`/dominios/buscarServicoDominiosCliente/${clientID}`)).data
@@ -170,7 +199,11 @@ const useClientStore = create<TypeClientStore>((set) => ({
         },
         setCurrentEmailService(email) {
             set({ currentEmailService: email })
-        }
+        },
+        setCurrentMicrosoftExchangeService(microsoftExchange) {
+            set({ currentMicrosoftExchangeService: microsoftExchange })
+        },
+    
     }
 }))
 

@@ -37,22 +37,40 @@ interface EmailItem {
     type: string;
 }
 
+
+interface MicrosoftExchangeItem {
+    id: string;
+    name: string;
+    price: number;
+    planId: string;
+    domain: string;
+    cicle: number;
+    cicleId: string;
+    newDomain: boolean;
+    extensionId: string;
+    type: string;
+}
+
 interface ItemStore {
     domainItem: DomainItem | null;
     hostingItem: HostingItem | null;
     emailItem: EmailItem | null;
+    exchangeItem: MicrosoftExchangeItem | null;
     setDomainItem: (item: DomainItem | null) => void;
     setHostingItem: (item: HostingItem | null) => void;
     setEmailItem: (item: EmailItem | null) => void;
+    setExchangeItem: (item: MicrosoftExchangeItem | null) => void;
 }
 
 const useItemStore = create<ItemStore>((set) => ({
     domainItem: null,
     hostingItem: null,
     emailItem: null,
+    exchangeItem:null,
     setDomainItem: (item) => set({ domainItem: item }),
     setHostingItem: (item) => set({ hostingItem: item }),
     setEmailItem: (item) => set({ emailItem: item }),
+    setExchangeItem:(item)=>set({exchangeItem:item})
 }));
 
 export default useItemStore;

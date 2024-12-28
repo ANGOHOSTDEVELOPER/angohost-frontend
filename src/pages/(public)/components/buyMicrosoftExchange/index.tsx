@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { Search } from "lucide-react"
+
 import useUtils from "@/utils/useutils"
 import usePayStore from "@/contexts/payStore"
 // import { domain, IDomainExtension } from "@/interfaces/domain"
@@ -24,70 +24,22 @@ import {  IDomainExtension } from "@/interfaces/domain"
 import { toast } from "sonner"
 import { TailSpin } from "react-loader-spinner"
 import Cookies from "js-cookie"
-import { Ciclo, IPlano } from "@/interfaces/plan.interface"
 import { ExitModal } from "../exitModal"
 import useCart from "@/hooks/useCart"
 import axios from "axios"
 import { IEdgarResponse } from "../transferDomainModal"
-import { IConvertDomainResponseToJson } from "@/utils/converterHtmlToJson"
+import { ICicloPlanoMicrosoftExchange, IPlanoMicrosoftExchange } from "@/interfaces/planoMicrosoftExchange"
 
 interface ICreateModalProps {
     opened: boolean,
     setOpened: Dispatch<SetStateAction<boolean>>,
-    plans: IPlano[],
+    plans: IPlanoMicrosoftExchange[],
     planIndex: number
 }
 
-interface ICiclo {
-    planoId: string;
-    cicloId: number;
-    ciclo: Ciclo;
-}
 
-// interface IYabaduRespose {
-//     sucess: boolean,
-//     message: string
-//     data: {
-//         numero: string,
-//         nome: string
-//     }
-// }
 
-// interface UserPersonalData {
-//     id_number: string;
-//     first_name: string;
-//     last_name: string;
-//     gender_name: string;
-//     birth_date: string;
-//     father_first_name: string;
-//     father_last_name: string;
-//     mother_first_name: string;
-//     mother_last_name: string;
-//     marital_status_name: string;
-//     birth_province_name: string;
-//     birth_municipality_name: string;
-//     issue_date: string;
-//     expiry_date: string;
-//     issue_place: string;
-//     residence_country_name: string;
-//     residence_province_name: string;
-//     residence_municipality_name: string;
-//     residence_commune_name: string;
-//     residence_neighbor: string;
-//     residence_address: string;
-// }
 
-/*
-interface ApiResponse {
-    messageType: number;
-    message: string | null;
-    data: {
-        code: number;
-        message: string;
-        data: UserPersonalData;
-    };
-}
-*/
 
 interface UserInfo {
     nif: string;
@@ -140,16 +92,16 @@ export interface IFORNECEDOR_RESPONSE {
 const NIF_REGEX = /^[0-9]{10}$/
 const BI_REGEX = /^[0-9]{9}[a-zA-Z]{2}[0-9]{3}$/
 
-export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreateModalProps) {
+export function BuyMicrosoftExchangeModal({ opened, setOpened, plans, planIndex }: ICreateModalProps) {
 
-    const [plan, setPlan] = useState<IPlano>({ categoriaId: 0, ciclos: [], descontos: 0, descricao: "", id: "", planoPopular: false, preco: 0, precoComDesconto: 0, recursos: [], titulo: '' })
-    const [ciclo, setCiclo] = useState<ICiclo>({ ciclo: { duracao: "", id: "", multiplicador: 0, nome: "" }, cicloId: 0, planoId: "" })
+    const [plan, setPlan] = useState<IPlanoMicrosoftExchange | null>(null)
+    const [ciclo, setCiclo] = useState<ICicloPlanoMicrosoftExchange | null>(null)
     
     const [domainMode, setDomainMode] = useState(1)
-    const [isOpened, setIsOpened] = useState(false)
-    const [total, setTotal] = useState(0)
+    const [isOpened, setIsOpened] = useState(false);
+    const [total, setTotal] = useState(0);
     const [verifDomain, setVerifDomain] = useState('')
-    const [loaderLoading, setLoaderLoading] = useState(false)
+  
     const [modalRegister, setModalRegister] = useState(false)
     const [processComplete, setProcessComplete] = useState(false)
     const [reusedDomain, setReusedDomain] = useState('')
@@ -172,14 +124,14 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
     const { domainExtensions, currentDomain, actions: {
         getDomainExtensions,
         setCurrentDomain,
-        setCurrentDomainAvailable,
-        setDomainVerifyProcessComplete
+      
     } } = usePayStore()
 
-    const { checkDomain, formatMoney } = useUtils()
+    const {  formatMoney } = useUtils()
 
     useEffect(() => {
-        setTotal(ciclo.ciclo.multiplicador * plan.preco)
+       
+       setTotal(Number(ciclo?.ciclo.multiplicador) *  Number(plan?.preco) )
     }, [ciclo, plan])
 
     useEffect(() => {
@@ -190,50 +142,10 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
 
     useEffect(() => {
         getDomainExtensions()
+
     }, [])
 
-    async function verifyDomain() {
 
-        if (selectedExtension.tipo !== '') {
-            setLoaderLoading(true)
-            setCurrentDomain(`${verifDomain}${selectedExtension.tipo}`)
-            try {
-                const json: IConvertDomainResponseToJson = await checkDomain(`${verifDomain}${selectedExtension.tipo}`)
-                // if (!json.domain_status && json.nameservers.length === 0) {
-                //     toast.success('Domínio disponivel')
-                //     setCurrentDomainAvailable(true)
-                //     setOpenedStatus(true)
-                // }
-                // else {
-                //     toast.error('Domínio indisponivel')
-                //     setCurrentDomainAvailable(false)
-                // }
-
-                if (json.availability && json.domain!="") {
-                    toast.success('Domínio disponivel')
-                    setCurrentDomainAvailable(true)
-                    setOpenedStatus(true)
-                }
-                else {
-                    toast.error('Domínio indisponivel')
-                    setCurrentDomainAvailable(false)
-                }
-                return json
-            }
-            catch (error) {
-                console.log(error)
-            }
-            finally {
-                setDomainVerifyProcessComplete(true)
-                setLoaderLoading(false)
-                const inp = document.querySelector('.inputVerifyDomain') as HTMLInputElement
-                inp.value = ''
-            }
-        }
-        else {
-            toast.error('Selecione a sua extensao!')
-        }
-    }
 
     useEffect(() => {
         document.addEventListener('keydown', (e) => {
@@ -246,52 +158,7 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
     async function verifyNif() {
         setClientNIF(nif.toUpperCase())
         setLoadingVerify(true)
-        // if (NIF_REGEX.test(nif)) {
-        //     try {
-        //         const response: IYabaduRespose = await (await proxy.get(`/yabaduu.ao/ao/actions/nif.ajcall.php?nif=${nif}`)).data
-        //         if (response.sucess) {
-        //             toast.success('NIF verificado com sucesso!')
-        //             setIsNIFLoaded(true)
-        //             setIsBILoaded(false)
-        //             setLoadingVerify(false)
-        //             setClientLoadedInfo({
-        //                 name: response.data.nome
-        //             })
-        //         }
-        //         else {
-        //             toast.error('NIF Invalido!')
-        //         }
-        //     }
-        //     catch (error) {
-        //         console.log(error)
-        //     }
-        //     finally {
-        //         setLoadingVerify(false)
-        //     }
-        //     
-        // }
-        // else if (BI_REGEX.test(nif)) {
-        //     setLoadingVerify(true)
-        //     try {
-        //         const resp: ApiResponse = await (await proxy.get(`/https://api.inagbe.gov.ao/api/v1/consultarBi?bi=${nif}`)).data
-        //         toast.success('BI Verificado com sucesso!')
-        //         setClientLoadedInfo({
-        //             name: `${resp.data.data.first_name} ${resp.data.data.last_name}`,
-        //         })
-        //         setIsBILoaded(true)
-        //         setIsNIFLoaded(false)
-        //     }
-        //     catch {
-        //         toast.error('Ocorreu um erro ao processar a sua solicitação!')
-        //     }
-        //     finally {
-        //         setLoadingVerify(false)
-        //     }
-        // }
-        // else {
-        //     toast.error('Valor inválido!')
-        //     setLoadingVerify(false)
-        // }º
+     
         try {
             const response: IEdgarResponse = await (await axios.get(`https://consulta.edgarsingui.ao/public/consultar-por-nif/${nif}`)).data
             if (response.data.success) {
@@ -325,7 +192,7 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
     }
 
     function registerTitular() {
-        if (selectedExtension.tipo === ".com" && ciclo.ciclo.multiplicador === 12) {
+        if (selectedExtension.tipo === ".com" && ciclo?.ciclo.multiplicador === 12) {
             setCurrentDomain(`${verifDomain}${selectedExtension.tipo}`)
             const product = {
                 id: (cartLenght + 1).toString(),
@@ -442,15 +309,15 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
         setLoadingAdd(true)
         const product = {
             id: (cartLenght).toString(),
-            name: `${plan.titulo}`,
-            price: plan.preco * ciclo.ciclo.multiplicador,
-            planId: plan.id,
+            name: `${plan?.titulo}`,
+            price: Number(plan?.preco ) * Number( ciclo?.ciclo.multiplicador),
+            planId: plan?.id,
             domain: domainMode === 1 ? reusedDomain : `${verifDomain}${selectedExtension.tipo}`,
-            cicle: ciclo.ciclo.multiplicador,
-            cicleId: ciclo.cicloId,
+            cicle: ciclo?.ciclo.multiplicador,
+            cicleId: ciclo?.cicloId,
             newDomain: domainMode === 1 ? false : true,
             entensionId: selectedExtension.id,
-            type: "hosting"
+            type: "exchange"
         }
         addToCart(product)
         setTimeout(() => {
@@ -525,10 +392,10 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
                             <div className="flex items-center justify-center gap-3">
                                 <p className="text-[2.3rem] font-bold mt-4 text-gradient">{formatMoney(total)}</p>
                             </div>
-                            <div className="flex items-center justify-center gap-3 mt-4">
+                            <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
                                 {
                                     plan && plan.ciclos.map((item, _index) => (
-                                        <Button style={{ background: ciclo.cicloId === item.cicloId ? "#aaaaff44" : "#fff" }} key={_index} onClick={() => setCiclo(item)} variant={"outline"} type="button">{item.ciclo.nome}</Button>
+                                        <Button style={{ background: ciclo?.cicloId === item.cicloId ? "#aaaaff44" : "#fff" }} key={_index} onClick={() => setCiclo(item)} variant={"outline"} type="button">{item.ciclo.nome}</Button>
                                     ))
                                 }
                             </div>
@@ -599,7 +466,7 @@ export function BuyHostingModal({ opened, setOpened, plans, planIndex }: ICreate
                             </div>
                         </div>
                         <Button type="button" onClick={() => setIsOpened(false)} variant={'outline'}>Cancelar</Button>
-                        <Button onClick={(verifyDomain)} disabled={verifDomain.length < 3 || loaderLoading || selectedExtension.id === 0 || verifDomain.includes('.') || verifDomain.includes('@' || verifDomain.includes('#'))} className="w-full bg-[var(--primary)] hover:bg-[var(--primary)] flex items*center justify-center gap-2 ">{loaderLoading ? <TailSpin color="#fff" width={20} /> : <>Verificar disponibilidade <Search width={18} type="button" /></>}</Button>
+                        {/* <Button onClick={(verifyDomain)} disabled={verifDomain.length < 3 || loaderLoading || selectedExtension.id === 0 || verifDomain.includes('.') || verifDomain.includes('@' || verifDomain.includes('#'))} className="w-full bg-[var(--primary)] hover:bg-[var(--primary)] flex items*center justify-center gap-2 ">{loaderLoading ? <TailSpin color="#fff" width={20} /> : <>Verificar disponibilidade <Search width={18} type="button" /></>}</Button> */}
                     </form>
                 </DialogContent>
             </Dialog>

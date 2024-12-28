@@ -1,3 +1,5 @@
+import { IPlanoMicrosoftExchange } from "./planoMicrosoftExchange";
+
 interface IFatura {
     id: string,
     planoId: number,
@@ -35,14 +37,18 @@ interface IServico {
     Plano: IPlano;
 }
 
+
+
 interface IFaturaProduto {
     id: number;
     faturaId: string;
     planoId: string;
+    planoMicrosoftExchangeId:string|null;
     dominioId: string | null;
     emailId: string | null;
     quantidade: number;
     preco: number;
+    planoMicrosoftExchange:IPlanoMicrosoftExchange
     plano: IPlano;
     dominio: {
         dominio: string,

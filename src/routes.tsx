@@ -57,6 +57,9 @@ import ResetPassword from "./pages/cliente/(pages)/(auth)/reset-password";
 import Expired from "./pages/(public)/(pages)/expired";
 import PaginaEmailOffice365 from "./pages/(public)/(pages)/email-office-365";
 import { PagesTransferenciaDeDominios } from "./pages/(public)/(pages)/transferir_dominio";
+import MicrosoftExchangeView from "./pages/cliente/(pages)/(private)/painel/microsoft-exchange";
+import MicrosoftExchangeLayout from "./pages/cliente/(pages)/(private)/painel/microsoft-exchange";
+import HomeMicrosoftExchangeView from "./pages/cliente/(pages)/(private)/painel/microsoft-exchange/inicio";
 
 const router = createBrowserRouter([
     {
@@ -237,6 +240,20 @@ const router = createBrowserRouter([
                 ]
             },
             {
+                path: "microsoft-exchange",
+                element: <MicrosoftExchangeLayout/>,
+                children: [
+                    {
+                        path: "servicos",
+                        element: <HomeMicrosoftExchangeView />
+                    },
+                    {
+                        path: "gerir/:id",
+                        element: <EmailManageView />
+                    },
+                ]
+            },
+            {
                 path: "email-beta",
                 element: <EmailBeta />
             },
@@ -248,6 +265,11 @@ const router = createBrowserRouter([
                 path: "ssl",
                 element: <SSLView />
             },
+            {
+                path: "microsoft-exchange",
+                element: <MicrosoftExchangeView />
+            }
+            ,
             {
                 path: "servicos",
                 element: <ServicesView />

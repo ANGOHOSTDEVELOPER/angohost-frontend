@@ -50,6 +50,12 @@ export default function NavBar() {
             icon: <ShieldCheck size={18} strokeWidth={1.5} className="mb-1" />
         },
         {
+            label: 'M Exchange',
+            href: '/cliente/painel/microsoft-exchange/servicos',
+            beta: true,
+            icon: <ShieldCheck size={18} strokeWidth={1.5} className="mb-1" />
+        },
+        {
             label: 'Serviços',
             href: '/cliente/painel/servicos',
             beta: true,

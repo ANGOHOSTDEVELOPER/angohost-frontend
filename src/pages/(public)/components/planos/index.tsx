@@ -25,7 +25,7 @@ export const ListaDePlano = () => {
         setPlans(filtroPlanoGuro as IPlano[])
 
 
-        console.log(data)
+        
     }, [data])
 
     function openModal(index: number) {
