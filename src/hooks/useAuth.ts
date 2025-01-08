@@ -52,8 +52,9 @@ export default function useAuth() {
         setIsLoading(true)
 
         try {
-            const signInResponse: ISignInResponse = await (await api.post(`/cliente/entrar/${data.tipo}`, form)).data
+            const signInResponse: ISignInResponse = await (await api.post(`/authClient/entrar/${data.tipo}`, form)).data
             console.log(signInResponse)
+            Cookies.set('authToken', signInResponse.token.token)
             Cookies.set('session', JSON.stringify({
                 token: signInResponse.token.token,
                 clientId: signInResponse.token.idCliente,

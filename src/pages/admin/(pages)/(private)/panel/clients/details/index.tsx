@@ -25,33 +25,51 @@ import {
     ServicoDominio,
     ServicoEmail,
     ServicoHospedagem,
+    IServicoMicrosoftExchange,
     ServicosClientes,
 } from "@/pages/admin/interfaces/clientServices.interface";
 import "@/pages/admin/styles/globals.css";
 import useUtils from "@/utils/useutils";
 import { Button } from "@/components/ui/button";
-import ilustration from "@/assets/svgs/undraw-empty.svg"
+import ilustration from "@/assets/svgs/undraw-empty.svg";
 import { TailSpin } from "react-loader-spinner";
 
 const filterServicesById = (
     services: ServicosClientes,
     searchId: string | null
 ) => {
-    const { servicosEmails, servicosDominios, servicosHospedagem } = services;
+    const {
+        servicosEmails,
+        servicosDominios,
+        servicosHospedagem,
+        servicosMicrosoftExchange,
+    } = services;
 
     const hasMatchingId = (service: { id: string }) => {
         return service.id.includes(searchId as string);
     };
 
     if (!searchId) {
-        return [...servicosEmails, ...servicosDominios, ...servicosHospedagem];
+        return [
+            ...servicosEmails,
+            ...servicosDominios,
+            ...servicosHospedagem,
+            ...servicosMicrosoftExchange,
+        ];
     }
 
     const filteredEmails = servicosEmails.filter(hasMatchingId);
     const filteredDominios = servicosDominios.filter(hasMatchingId);
     const filteredHospedagem = servicosHospedagem.filter(hasMatchingId);
+    const filteredMicrosoftEchange =
+        servicosMicrosoftExchange.filter(hasMatchingId);
 
-    return [...filteredEmails, ...filteredDominios, ...filteredHospedagem];
+    return [
+        ...filteredEmails,
+        ...filteredDominios,
+        ...filteredHospedagem,
+        ...filteredMicrosoftEchange,
+    ];
 };
 
 export default function DetailsView() {
@@ -65,7 +83,7 @@ export default function DetailsView() {
         isLoadingServices,
         getServices,
         ativateService,
-        isLoadingAtivateService
+        isLoadingAtivateService,
     } = useDetails();
     const [opened, setOpened] = useState(false);
     const { id } = useParams();
@@ -104,6 +122,7 @@ export default function DetailsView() {
                                 <button
                                     onClick={() => router(-1)}
                                     className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center bg-[#ffffff] hover:bg-[#f6f8fc] transition-colors duration-300 border"
+                                    title="Go back"
                                 >
                                     <ChevronLeft />
                                 </button>
@@ -190,11 +209,12 @@ export default function DetailsView() {
                                         Descrição
                                     </TableHead>
                                     {currentService &&
-                                        "Dominio" in currentService && currentService.Dominio.chaveEpp &&
-                                        <TableHead className="p-2">
-                                            ChaveEpp
-                                        </TableHead>
-                                    }
+                                        "Dominio" in currentService &&
+                                        currentService.Dominio.chaveEpp && (
+                                            <TableHead className="p-2">
+                                                ChaveEpp
+                                            </TableHead>
+                                        )}
                                     <TableHead className="p-2">
                                         Início
                                     </TableHead>
@@ -215,12 +235,15 @@ export default function DetailsView() {
                                                 Domínio{" "}
                                                 {currentService.Dominio.dominio}
                                             </TableCell>
-                                            {currentService.Dominio.chaveEpp &&
+                                            {currentService.Dominio
+                                                .chaveEpp && (
                                                 <TableCell className="p-2">
-                                                   
-                                                    {currentService.Dominio.chaveEpp}
+                                                    {
+                                                        currentService.Dominio
+                                                            .chaveEpp
+                                                    }
                                                 </TableCell>
-                                            }
+                                            )}
                                             <TableCell className="p-2">
                                                 {formatDate(
                                                     currentService.criadoEm
@@ -229,43 +252,55 @@ export default function DetailsView() {
                                             <TableCell className="p-2">
                                                 {currentService.expiraEm
                                                     ? formatDate(
-                                                        currentService.expiraEm
-                                                    )
+                                                          currentService.expiraEm
+                                                      )
                                                     : "Pendente"}
                                             </TableCell>
                                             <TableCell className="p-2">
                                                 {currentService.status ===
                                                     "ATIVO" && (
-                                                        <button
-                                                            onClick={() =>
-                                                                setOpened(true)
-                                                            }
-                                                            className="bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
-                                                        >
-                                                            Criar credenciais{" "}
-                                                            <KeyRound
-                                                                width={15}
-                                                                strokeWidth={1.5}
-                                                            />
-                                                        </button>
-                                                    )}
+                                                    <button
+                                                        onClick={() =>
+                                                            setOpened(true)
+                                                        }
+                                                        className="bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        Criar credenciais{" "}
+                                                        <KeyRound
+                                                            width={15}
+                                                            strokeWidth={1.5}
+                                                        />
+                                                    </button>
+                                                )}
                                                 {currentService.status ===
                                                     "PENDENTE" && (
-                                                        <Button onClick={() => ativateService(currentService.id, id as string)} className="bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border">
-                                                            {
-                                                                isLoadingAtivateService ?
-                                                                    <TailSpin color="#fff" width={15} />
-                                                                    :
-                                                                    <>
-                                                                        Ativar
-                                                                        <Check
-                                                                            width={15}
-                                                                            strokeWidth={1.5}
-                                                                        />
-                                                                    </>
-                                                            }
-                                                        </Button>
-                                                    )}
+                                                    <Button
+                                                        onClick={() =>
+                                                            ativateService(
+                                                                currentService.id,
+                                                                id as string
+                                                            )
+                                                        }
+                                                        className="bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        {isLoadingAtivateService ? (
+                                                            <TailSpin
+                                                                color="#fff"
+                                                                width={15}
+                                                            />
+                                                        ) : (
+                                                            <>
+                                                                Ativar
+                                                                <Check
+                                                                    width={15}
+                                                                    strokeWidth={
+                                                                        1.5
+                                                                    }
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </Button>
+                                                )}
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -291,43 +326,55 @@ export default function DetailsView() {
                                             <TableCell className="p-2">
                                                 {currentService.expiraEm
                                                     ? formatDate(
-                                                        currentService.expiraEm
-                                                    )
+                                                          currentService.expiraEm
+                                                      )
                                                     : "Pendente"}
                                             </TableCell>
                                             <TableCell className="p-2">
                                                 {currentService.status ===
                                                     "ATIVO" && (
-                                                        <button
-                                                            onClick={() =>
-                                                                setOpened(true)
-                                                            }
-                                                            className="bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
-                                                        >
-                                                            Criar credenciais{" "}
-                                                            <KeyRound
-                                                                width={15}
-                                                                strokeWidth={1.5}
-                                                            />
-                                                        </button>
-                                                    )}
+                                                    <button
+                                                        onClick={() =>
+                                                            setOpened(true)
+                                                        }
+                                                        className="bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        Criar credenciais{" "}
+                                                        <KeyRound
+                                                            width={15}
+                                                            strokeWidth={1.5}
+                                                        />
+                                                    </button>
+                                                )}
                                                 {currentService.status ===
                                                     "PENDENTE" && (
-                                                        <Button onClick={() => ativateService(currentService.id, id as string)} className="bg-[var(--primary)] hover:bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-3 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border">
-                                                            {
-                                                                isLoadingAtivateService ?
-                                                                    <TailSpin color="#fff" width={15} />
-                                                                    :
-                                                                    <>
-                                                                        Ativar
-                                                                        <Check
-                                                                            width={15}
-                                                                            strokeWidth={1.5}
-                                                                        />
-                                                                    </>
-                                                            }
-                                                        </Button>
-                                                    )}
+                                                    <Button
+                                                        onClick={() =>
+                                                            ativateService(
+                                                                currentService.id,
+                                                                id as string
+                                                            )
+                                                        }
+                                                        className="bg-[var(--primary)] hover:bg-[var(--primary)] hover:bg-[var(--primary)] text-white px-3 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        {isLoadingAtivateService ? (
+                                                            <TailSpin
+                                                                color="#fff"
+                                                                width={15}
+                                                            />
+                                                        ) : (
+                                                            <>
+                                                                Ativar
+                                                                <Check
+                                                                    width={15}
+                                                                    strokeWidth={
+                                                                        1.5
+                                                                    }
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </Button>
+                                                )}
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -362,43 +409,137 @@ export default function DetailsView() {
                                             <TableCell className="p-2">
                                                 {currentService.expiraEm
                                                     ? formatDate(
-                                                        currentService.expiraEm
-                                                    )
+                                                          currentService.expiraEm
+                                                      )
                                                     : "Pendente"}
                                             </TableCell>
                                             <TableCell className="p-2">
                                                 {currentService.status ===
                                                     "ATIVO" && (
-                                                        <button
-                                                            onClick={() =>
-                                                                setOpened(true)
-                                                            }
-                                                            className="bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
-                                                        >
-                                                            Criar credenciais{" "}
-                                                            <KeyRound
-                                                                width={15}
-                                                                strokeWidth={1.5}
-                                                            />
-                                                        </button>
-                                                    )}
+                                                    <button
+                                                        onClick={() =>
+                                                            setOpened(true)
+                                                        }
+                                                        className="bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        Criar credenciais{" "}
+                                                        <KeyRound
+                                                            width={15}
+                                                            strokeWidth={1.5}
+                                                        />
+                                                    </button>
+                                                )}
                                                 {currentService.status ===
                                                     "PENDENTE" && (
-                                                        <Button onClick={() => ativateService(currentService.id, id as string)} className="bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border">
-                                                            {
-                                                                isLoadingAtivateService ?
-                                                                    <TailSpin color="#fff" width={15} />
-                                                                    :
-                                                                    <>
-                                                                        Ativar
-                                                                        <Check
-                                                                            width={15}
-                                                                            strokeWidth={1.5}
-                                                                        />
-                                                                    </>
-                                                            }
-                                                        </Button>
-                                                    )}
+                                                    <Button
+                                                        onClick={() =>
+                                                            ativateService(
+                                                                currentService.id,
+                                                                id as string
+                                                            )
+                                                        }
+                                                        className="bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        {isLoadingAtivateService ? (
+                                                            <TailSpin
+                                                                color="#fff"
+                                                                width={15}
+                                                            />
+                                                        ) : (
+                                                            <>
+                                                                Ativar
+                                                                <Check
+                                                                    width={15}
+                                                                    strokeWidth={
+                                                                        1.5
+                                                                    }
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </Button>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+
+                                {currentService &&
+                                    "PlanoMicrosoftExchange" in
+                                        currentService && (
+                                        <TableRow className="border-b border-gray-200">
+                                            <TableCell className="font-medium p-2">
+                                                {currentService.status}
+                                            </TableCell>
+                                            <TableCell className="p-2">
+                                                PlanoMicrosoftExchange:{" "}
+                                                <span className="opacity-70">
+                                                    {
+                                                        currentService
+                                                            .PlanoMicrosoftExchange
+                                                            .titulo
+                                                    }
+                                                </span>{" "}
+                                                Contas:{" "}
+                                                <span className="opacity-70">
+                                                    {3}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="p-2">
+                                                {formatDate(
+                                                    currentService.criadoEm
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="p-2">
+                                                {currentService.expiraEm
+                                                    ? formatDate(
+                                                          currentService.expiraEm
+                                                      )
+                                                    : "Pendente"}
+                                            </TableCell>
+                                            <TableCell className="p-2">
+                                                {currentService.status ===
+                                                    "APROVADO" && (
+                                                    <button
+                                                        onClick={() =>
+                                                            setOpened(true)
+                                                        }
+                                                        className="bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        Criar credenciais{" "}
+                                                        <KeyRound
+                                                            width={15}
+                                                            strokeWidth={1.5}
+                                                        />
+                                                    </button>
+                                                )}
+                                                {currentService.status ===
+                                                    "PENDENTE" && (
+                                                    <Button
+                                                        onClick={() =>
+                                                            ativateService(
+                                                                currentService.id,
+                                                                id as string
+                                                            )
+                                                        }
+                                                        className="bg-[var(--primary)] text-white px-2.5 py-1.5 rounded-md text-[0.8rem] font-light flex items-center justify-center gap-1.5 border"
+                                                    >
+                                                        {isLoadingAtivateService ? (
+                                                            <TailSpin
+                                                                color="#fff"
+                                                                width={15}
+                                                            />
+                                                        ) : (
+                                                            <>
+                                                                Ativar
+                                                                <Check
+                                                                    width={15}
+                                                                    strokeWidth={
+                                                                        1.5
+                                                                    }
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </Button>
+                                                )}
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -438,7 +579,7 @@ export default function DetailsView() {
                 ) : (
                     <div className="w-[400px] h-full gap-2 flex flex-col items-center justify-start bg-white rounded-[20px] border-solid border-[1px] p-4">
                         <div className="w-full rounded-lg px-4 h-max flex items-center justify-center border-solid border-[1px]">
-                            <button>
+                            <button title="Search">
                                 <Search
                                     size={18}
                                     strokeWidth={1.5}
@@ -473,31 +614,32 @@ export default function DetailsView() {
                                                 style={{
                                                     backgroundColor:
                                                         service.status ===
-                                                            "ATIVO"
+                                                        "ATIVO"
                                                             ? greenFore
                                                             : service.status ===
-                                                                "PENDENTE"
-                                                                ? yellowFore
-                                                                : service.status ===
-                                                                    "CANCELADO"
-                                                                    ? grayFore
-                                                                    : redFore,
+                                                              "PENDENTE"
+                                                            ? yellowFore
+                                                            : service.status ===
+                                                              "CANCELADO"
+                                                            ? grayFore
+                                                            : redFore,
                                                 }}
                                                 className="p-3 rounded-[8px]"
                                             >
                                                 <GlobeLock
                                                     strokeWidth={1.5}
-                                                    color={`${service.status ===
+                                                    color={`${
+                                                        service.status ===
                                                         "ATIVO"
-                                                        ? green
-                                                        : service.status ===
-                                                            "PENDENTE"
+                                                            ? green
+                                                            : service.status ===
+                                                              "PENDENTE"
                                                             ? yellow
                                                             : service.status ===
-                                                                "CANCELADO"
-                                                                ? gray
-                                                                : red
-                                                        }`}
+                                                              "CANCELADO"
+                                                            ? gray
+                                                            : red
+                                                    }`}
                                                 />
                                             </div>
                                             <div className="w-full flex flex-col items-start justify-center">
@@ -532,32 +674,33 @@ export default function DetailsView() {
                                                 style={{
                                                     backgroundColor:
                                                         service.status ===
-                                                            "ATIVO"
+                                                        "ATIVO"
                                                             ? greenFore
                                                             : service.status ===
-                                                                "PENDENTE"
-                                                                ? yellowFore
-                                                                : service.status ===
-                                                                    "CANCELADO"
-                                                                    ? grayFore
-                                                                    : redFore,
+                                                              "PENDENTE"
+                                                            ? yellowFore
+                                                            : service.status ===
+                                                              "CANCELADO"
+                                                            ? grayFore
+                                                            : redFore,
                                                 }}
                                                 className="p-3 rounded-[8px]"
                                             >
                                                 <Mail
                                                     strokeWidth={1.5}
                                                     className="text-zinc-600"
-                                                    color={`${service.status ===
+                                                    color={`${
+                                                        service.status ===
                                                         "ATIVO"
-                                                        ? green
-                                                        : service.status ===
-                                                            "PENDENTE"
+                                                            ? green
+                                                            : service.status ===
+                                                              "PENDENTE"
                                                             ? yellow
                                                             : service.status ===
-                                                                "CANCELADO"
-                                                                ? gray
-                                                                : red
-                                                        }`}
+                                                              "CANCELADO"
+                                                            ? gray
+                                                            : red
+                                                    }`}
                                                 />
                                             </div>
                                             <div className="w-full flex flex-col items-start justify-center">
@@ -596,32 +739,33 @@ export default function DetailsView() {
                                                 style={{
                                                     backgroundColor:
                                                         service.status ===
-                                                            "ATIVO"
+                                                        "ATIVO"
                                                             ? greenFore
                                                             : service.status ===
-                                                                "PENDENTE"
-                                                                ? yellowFore
-                                                                : service.status ===
-                                                                    "CANCELADO"
-                                                                    ? grayFore
-                                                                    : redFore,
+                                                              "PENDENTE"
+                                                            ? yellowFore
+                                                            : service.status ===
+                                                              "CANCELADO"
+                                                            ? grayFore
+                                                            : redFore,
                                                 }}
                                                 className="p-3 bg-zinc-50 rounded-[8px]"
                                             >
                                                 <Cloud
                                                     strokeWidth={1.5}
                                                     className="text-zinc-600"
-                                                    color={`${service.status ===
+                                                    color={`${
+                                                        service.status ===
                                                         "ATIVO"
-                                                        ? green
-                                                        : service.status ===
-                                                            "PENDENTE"
+                                                            ? green
+                                                            : service.status ===
+                                                              "PENDENTE"
                                                             ? yellow
                                                             : service.status ===
-                                                                "CANCELADO"
-                                                                ? gray
-                                                                : red
-                                                        }`}
+                                                              "CANCELADO"
+                                                            ? gray
+                                                            : red
+                                                    }`}
                                                 />
                                             </div>
                                             <div className="w-full flex flex-col items-start justify-center">
@@ -640,11 +784,82 @@ export default function DetailsView() {
                                             </div>
                                         </div>
                                     )}
+
+                                    {"PlanoMicrosoftExchange" in service && (
+                                        // Serviço de PlanoMicrosoftExchange
+                                        <div
+                                            data-active={
+                                                currentService?.id ===
+                                                service.id
+                                            }
+                                            onClick={() =>
+                                                setCurrentService(service)
+                                            }
+                                            key={index}
+                                            className="cardFatura w-full cursor-pointer h-[80px] gap-2 flex items-center justify-between border-[1px] border-solid rounded-[12px] p-3"
+                                        >
+                                            <div
+                                                style={{
+                                                    backgroundColor:
+                                                        service.status ===
+                                                        "APROVADO"
+                                                            ? greenFore
+                                                            : service.status ===
+                                                              "PENDENTE"
+                                                            ? yellowFore
+                                                            : service.status ===
+                                                              "CANCELADO"
+                                                            ? grayFore
+                                                            : redFore,
+                                                }}
+                                                className="p-3 bg-zinc-50 rounded-[8px]"
+                                            >
+                                                <Cloud
+                                                    strokeWidth={1.5}
+                                                    className="text-zinc-600"
+                                                    color={`${
+                                                        service.status ===
+                                                        "APROVADO"
+                                                            ? green
+                                                            : service.status ===
+                                                              "PENDENTE"
+                                                            ? yellow
+                                                            : service.status ===
+                                                              "CANCELADO"
+                                                            ? gray
+                                                            : red
+                                                    }`}
+                                                />
+                                            </div>
+                                            <div className="w-full flex flex-col items-start justify-center">
+                                                <p className="text-[0.8rem]">
+                                                    <strong className="text-[#092c42]">
+                                                        Plano:{" "}
+                                                        {
+                                                            service
+                                                                .PlanoMicrosoftExchange
+                                                                .titulo
+                                                        }
+                                                    </strong>
+                                                </p>
+                                                <p>
+                                                    <strong className="text-[#092c42]">
+                                                        Domínio :
+                                                    </strong>{" "}
+                                                    {service.dominio}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </>
                             ))}
                             {filteredServices.length === 0 && (
                                 <div className="w-full h-full flex items-center justify-center flex-col">
-                                    <img src={ilustration} className="w-[100px] mb-3" alt="Ilustração de um computador com um sinal de internet" />
+                                    <img
+                                        src={ilustration}
+                                        className="w-[100px] mb-3"
+                                        alt="Ilustração de um computador com um sinal de internet"
+                                    />
                                     <p>Sem serviços</p>
                                 </div>
                             )}
@@ -660,12 +875,12 @@ export default function DetailsView() {
                 clientId={currentClient?.id as string}
                 service={
                     currentService as
-                    | ServicoDominio
-                    | ServicoEmail
-                    | ServicoHospedagem
+                        | ServicoDominio
+                        | ServicoEmail
+                        | ServicoHospedagem
+                        | IServicoMicrosoftExchange
                 }
             />
         </div>
     );
 }
-

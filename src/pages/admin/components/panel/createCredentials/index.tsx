@@ -19,6 +19,7 @@ import {
     ServicoDominio,
     ServicoEmail,
     ServicoHospedagem,
+    IServicoMicrosoftExchange
 } from "@/pages/admin/interfaces/clientServices.interface";
 
 interface ICreateModalProps {
@@ -27,7 +28,7 @@ interface ICreateModalProps {
     email: string;
     clientId: string;
     name: string;
-    service: ServicoEmail | ServicoDominio | ServicoHospedagem;
+    service: ServicoEmail | ServicoDominio | ServicoHospedagem|IServicoMicrosoftExchange;
 }
 
 const formSchema = z.object({
@@ -64,6 +65,9 @@ export function CreateCredentialsModal({
         }
         if("Email" in service){
             url = "credencialServicoEmail"
+        }
+        if("PlanoMicrosoftExchange" in service){
+            url = "credencialMicrosoftExchange"
         }
         const form = {
             email: email,

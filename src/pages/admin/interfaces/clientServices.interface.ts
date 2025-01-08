@@ -59,11 +59,45 @@ interface ServicoHospedagem {
 
 }
 
+
+
+interface IPlanoMicrosoftExchange {
+    id: string;
+    titulo: string;
+    recursos: string[]; // Um array de strings com os recursos do plano
+    planoPopular: boolean;
+    descricao: string;
+    preco: number; // Preço em centavos ou na unidade usada
+    descontos: number; // Valor do desconto
+    precoComDesconto: number; // Preço final com desconto aplicado
+    categoriaId: number;
+  }
+  
+interface IServicoMicrosoftExchange {
+    id: string;
+    idCiclo: number; // ID do ciclo correspondente
+    dominio: string | null; // Domínio pode ser null
+    clienteId: string;
+    planoMicrosoftExchangeId: string;
+    faturaId: string;
+    status: 'PENDENTE' | 'APROVADO' | 'CANCELADO'; // Enum para status
+    criadoEm: string; // Data em formato ISO
+    atualizadoEm: string; // Data em formato ISO
+    expiraEm: string | null; // Data de expiração ou null
+    PlanoMicrosoftExchange: IPlanoMicrosoftExchange; // Detalhes do plano
+  }
+  
+
+
+
+
+
 interface ServicosClientes {
     servicosEmails: ServicoEmail[];
     servicosDominios: ServicoDominio[];
     servicosHospedagem: ServicoHospedagem[];
+    servicosMicrosoftExchange: IServicoMicrosoftExchange[];
 }
 
 
-export type { ServicoEmail, ServicoDominio, ServicoHospedagem, ServicosClientes }
+export type { ServicoEmail, ServicoDominio, ServicoHospedagem,IServicoMicrosoftExchange, ServicosClientes }

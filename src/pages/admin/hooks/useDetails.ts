@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "@/services/api";
 import { toast } from "sonner";
 import { ICliente, IFaturaProduto } from "@/interfaces/clientInterface";
-import { ServicoDominio, ServicoEmail, ServicoHospedagem, ServicosClientes } from "../interfaces/clientServices.interface";
+import { ServicoDominio, ServicoEmail, ServicoHospedagem, ServicosClientes,IServicoMicrosoftExchange } from "../interfaces/clientServices.interface";
 
 interface ResponseData {
     success: boolean;
@@ -13,7 +13,7 @@ interface ResponseData {
 export default function useDetails() {
 
     const [currentClient, setCurrentClient] = useState<ICliente>()
-    const [currentService, setCurrentService] = useState<ServicoEmail | ServicoDominio | ServicoHospedagem>()
+    const [currentService, setCurrentService] = useState<ServicoEmail | ServicoDominio | ServicoHospedagem |IServicoMicrosoftExchange >()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isLoadingServices, setIsLoadingServices] = useState<boolean>(false)
     const [selectedFatura, setSelectedFatura] = useState<IFaturaProduto | null>()
@@ -21,7 +21,8 @@ export default function useDetails() {
     const [services, setServices] = useState<ServicosClientes>({
         servicosDominios: [],
         servicosEmails: [],
-        servicosHospedagem: []
+        servicosHospedagem: [],
+        servicosMicrosoftExchange: []
     })
 
     async function getClient(clientId: string) {
@@ -57,11 +58,17 @@ export default function useDetails() {
         let serviceType;
         if ('Email' in currentService!) {
             serviceType = '/servicosEmailsCliente/ativarServicoEmailCliente';
-        } else if ('Dominio' in currentService!) {
+        } 
+        else if ('Dominio' in currentService!) {
             serviceType = '/dominios/ativarServicoDominiosCliente';
-        } else if ('Plano' in currentService!) {
+        } 
+        else if ('Plano' in currentService!) {
             serviceType = '/servicos/ativarIdServicoHospedagem';
         }
+        else if ('PlanoMicrosoftExchange' in currentService!) {
+            serviceType = '/servicosMicrosoftExchangeCliente/ativarServicoMicrosoftExchangeCliente';
+        }
+
         try {
             const response = await (await api.put(`${serviceType}/${serviceId}`)).data
             if (response.success) {
